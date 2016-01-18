@@ -9,7 +9,11 @@ var argv = require('optimist').argv;
 if(argv.h || argv.help) {
   var help = `
 quickpack page1=./entry1.js [page2=./entry2.js ...]
+
+A prebaked Webpack configuration.
 `
+  console.log(help);
+  process.exit(0);
 }
 
 var config = require("./build-config")(argv);

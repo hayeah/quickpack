@@ -1,5 +1,5 @@
 /*
-packit a=./bar.js b=./baz.js  ... <outputDir>
+quickpack a=./bar.js b=./baz.js  ... <outputDir>
 */
 
 var path = require("path");
