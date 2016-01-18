@@ -1,8 +1,11 @@
 {
-  "name": "webpack-boilerplate",
-  "version": "1.0.0",
+  "name": "quickpack",
+  "version": "0.0.1",
   "description": "",
-  "main": "config.js",
+  "main": "build-config.js",
+  "bin": {
+    "quickpack": "./bin/quickpack.js"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },

@@ -1,14 +1,20 @@
+#!/usr/bin/env node
+
 var path = require("path");
 
 var webpack = require("webpack");
 
 var argv = require('optimist').argv;
+
+if(argv.h || argv.help) {
+  var help = `
+quickpack page1=./entry1.js [page2=./entry2.js ...]
+`
+}
+
 var config = require("./build-config")(argv);
 
 // TODO: check that it's a npm project. Or who cares ¯\_(ツ)_/¯
-
-// console.log("Running webpack at",projectRoot);
-
 var compiler = webpack(config);
 
 compiler.watch({ // watch options:
