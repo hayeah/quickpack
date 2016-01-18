@@ -9,7 +9,6 @@ var ProgressPlugin = require("webpack/lib/ProgressPlugin");
 var UglifyJsPlugin = require("webpack/lib/optimize/UglifyJsPlugin");
 
 var AssetsPlugin = require('assets-webpack-plugin');
-var assetsPlugin = new AssetsPlugin();
 
 var ExtractTextPlugin = require("extract-text-webpack-plugin");
 
@@ -48,6 +47,8 @@ function extractEntries(argv) {
 module.exports = function buildConfig(argv) {
   var projectRoot = process.cwd();
 
+  var outputDir = path.join(projectRoot,"build");
+
   var config = {
     context: projectRoot,
 
@@ -55,7 +56,7 @@ module.exports = function buildConfig(argv) {
     entry: extractEntries(argv),
 
     output: {
-      path: path.join(projectRoot,"build"),
+      path: outputDir,
       filename: "[name]-[hash].js",
       // publicPath: "/assets/",
     },
@@ -115,7 +116,6 @@ module.exports = function buildConfig(argv) {
     plugins: [
       progressPlugin,
       extractCSS,
-      assetsPlugin,
     ],
 
     babel: {
@@ -133,6 +133,15 @@ module.exports = function buildConfig(argv) {
   if(argv.p == true || argv.production == true) {
     config.plugins.push(new UglifyJsPlugin());
   }
+
+
+  // https://github.com/sporto/assets-webpack-plugin
+  var assetsPlugin = new AssetsPlugin({
+    filename: "assets.json",
+    path: outputDir,
+    prettyPrint: true,
+   });
+  config.plugins.push(assetsPlugin);
 
   return config;
 }

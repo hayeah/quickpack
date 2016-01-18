@@ -16,7 +16,7 @@ A prebaked Webpack configuration.
   process.exit(0);
 }
 
-var config = require("./build-config")(argv);
+var config = require("../build-config")(argv);
 
 // TODO: check that it's a npm project. Or who cares ¯\_(ツ)_/¯
 var compiler = webpack(config);
