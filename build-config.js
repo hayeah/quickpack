@@ -26,8 +26,6 @@ var progressPlugin = new ProgressPlugin(function(percentage, msg) {
   // console.log(percentage,msg);npm
 });
 
-var extractCSS = new ExtractTextPlugin("app-[contenthash].css");
-
 function extractEntries(argv) {
   var entries = {};
 
@@ -49,6 +47,12 @@ module.exports = function buildConfig(argv) {
 
   var outputDir = path.join(projectRoot,"build");
 
+  // console.log(argv);
+
+  var disableHashing = argv["no-hash"] === 'true';
+
+  var extractCSS = new ExtractTextPlugin(disableHashing ? "app.css" : "app-[contenthash].css");
+
   var config = {
     context: projectRoot,
 
@@ -57,14 +61,18 @@ module.exports = function buildConfig(argv) {
 
     output: {
       path: outputDir,
-      filename: "[name]-[hash].js",
+      filename: disableHashing ? "[name].js" : "[name]-[hash].js",
       // publicPath: "/assets/",
     },
 
     resolve: {
-      root: process.cwd(),
+      root: projectRoot,
+      modulesDirectories: [
+        path.join(projectRoot, 'node_modules'),
+        path.join(__dirname, 'node_modules'),
+      ],
       // Add `.ts` and `.tsx` as a resolvable extension.
-      extensions: ['', '.webpack.js', '.web.js', '.ts', '.tsx', '.js', '.jsx']
+      extensions: ['', '.webpack.js', '.web.js', '.ts', '.tsx', '.js', '.jsx','.css']
     },
 
     resolveLoader: {
@@ -136,12 +144,15 @@ module.exports = function buildConfig(argv) {
 
 
   // https://github.com/sporto/assets-webpack-plugin
-  var assetsPlugin = new AssetsPlugin({
-    filename: "assets.json",
-    path: outputDir,
-    prettyPrint: true,
-   });
-  config.plugins.push(assetsPlugin);
+  if(!disableHashing) {
+    var assetsPlugin = new AssetsPlugin({
+      filename: "assets.json",
+      path: outputDir,
+      prettyPrint: true,
+    });
+    config.plugins.push(assetsPlugin);
+  }
+
 
   return config;
 }
