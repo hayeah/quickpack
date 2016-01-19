@@ -49,9 +49,7 @@ module.exports = function buildConfig(argv) {
 
   var outputDir = path.join(projectRoot,"build");
 
-  // console.log(argv);
-
-  var disableHashing = argv["no-hash"] === 'true';
+  var disableHashing = argv.hash !== true;
 
   var extractCSS = new ExtractTextPlugin(disableHashing ? "app.css" : "app-[contenthash].css");
 
