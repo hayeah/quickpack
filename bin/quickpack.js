@@ -41,11 +41,23 @@ if (command === 'build') {
     .alias("h","help")
     .argv
 
-  console.log(argv);
   require("../build")(argv);
-  // console.log('hello!',argv);
+
 } else if (command === 'server'){
-  console.log('server');
+  argv = yargs.reset()
+    .usage('$0 server')
+    .options({
+      port: {
+        describe: 'port number',
+        default: 8000,
+        type: 'number',
+      }
+    })
+    .options(webpackOptions)
+    .help('h')
+    .example("PORT=4321 $0 server", "use ENV to specify port")
+    .alias("h","help").argv
+   require("../server")(argv);
 } else {
   yargs.showHelp();
 }

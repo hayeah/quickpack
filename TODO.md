@@ -1,3 +1,9 @@
+# dev server
+
++ basic static server
++ proxy mode
++ hot module reload
+
 # data-loader
 
 steal stuff from

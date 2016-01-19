@@ -33,6 +33,7 @@
     "progress": "^1.1.8",
     "style-loader": "^0.13.0",
     "supports-color": "^3.1.2",
-    "webpack-dev-server": "^1.14.1"
+    "webpack-dev-server": "^1.14.1",
+    "yargs": "^3.32.0"
   }
 }
