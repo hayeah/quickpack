@@ -1,41 +1,46 @@
 #!/usr/bin/env node
 
-var path = require("path");
+var yargs = require('yargs')
+  .usage('$0 command')
+  .command('build', 'Builds the project.')
+  .command('server', 'Start dev server.')
+  .demand(1, 'must provide a valid command'),
+  argv = yargs.argv,
+  command = argv._[0];
 
-var webpack = require("webpack");
+if (command === 'build') {
+  argv = yargs.reset()
+    .usage('$0 build page1=./entry1 page2=./entry2 ...')
+    .options({
+      w: {
+        alias: 'watch',
+        describe: "Watch mode",
+        default: false,
+        type: 'boolean',
+      },
 
-var argv = require('optimist').argv;
+      p: {
+        alias: 'production',
+        describe: "Build for production environment",
+        default: false,
+        type: 'boolean',
+      },
 
-if(argv.h || argv.help) {
-  var help = `
-quickpack page1=./entry1.js [page2=./entry2.js ...]
+      "no-hash": {
+        describe: "Disable long-term cache hashing",
+        default: true,
+        type: 'boolean',
+      },
+    })
+    .help('h')
+    .alias("h","help")
+    .argv
 
-A prebaked Webpack configuration.
-`
-  console.log(help);
-  process.exit(0);
+  console.log(argv);
+  require("../build")(argv);
+  // console.log('hello!',argv);
+} else if (command === 'server'){
+  console.log('server');
+} else {
+  yargs.showHelp();
 }
-
-var config = require("../build-config")(argv);
-
-// TODO: check that it's a npm project. Or who cares ¯\_(ツ)_/¯
-var compiler = webpack(config);
-
-compiler.watch({ // watch options:
-    aggregateTimeout: 300, // wait so long for more changes
-    // poll: false // use polling instead of native watchers
-    // pass a number to set the polling interval
-}, function(err, stats) {
-  if(err) {
-    console.error(err.stack || err);
-    if(err.details) console.error(err.details);
-    return;
-  }
-
-  if(stats.hasErrors) {
-    process.stdout.write(stats.toString({
-      errorDetails: true,
-      colors: require("supports-color"),
-    }));
-  }
-});

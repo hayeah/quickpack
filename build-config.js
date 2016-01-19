@@ -26,10 +26,10 @@ var progressPlugin = new ProgressPlugin(function(percentage, msg) {
   // console.log(percentage,msg);npm
 });
 
-function extractEntries(argv) {
+function extractEntries(items) {
   var entries = {};
 
-  argv._.forEach(function(item) {
+  items.forEach(function(item) {
     if(item.indexOf("=") !== -1) {
       var parts = item.split("=");
       var key = parts[0];
@@ -45,6 +45,8 @@ function extractEntries(argv) {
 module.exports = function buildConfig(argv) {
   var projectRoot = process.cwd();
 
+  var input = argv._.slice(1)
+
   var outputDir = path.join(projectRoot,"build");
 
   // console.log(argv);
@@ -57,7 +59,7 @@ module.exports = function buildConfig(argv) {
     context: projectRoot,
 
     // a=./bar.js b=./baz.js
-    entry: extractEntries(argv),
+    entry: extractEntries(input),
 
     output: {
       path: outputDir,
@@ -138,7 +140,7 @@ module.exports = function buildConfig(argv) {
     ],
   }
 
-  if(argv.p == true || argv.production == true) {
+  if(argv.production) {
     config.plugins.push(new UglifyJsPlugin());
   }
 
