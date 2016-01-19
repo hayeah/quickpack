@@ -62,7 +62,7 @@ module.exports = function buildConfig(argv) {
     output: {
       path: outputDir,
       filename: disableHashing ? "[name].js" : "[name]-[hash].js",
-      // publicPath: "/assets/",
+      publicPath: "/build/",
     },
 
     resolve: {
