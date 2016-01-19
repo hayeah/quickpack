@@ -3,11 +3,21 @@ var Server = require("webpack-dev-server");
 
 function server(argv) {
   var config = require("./build-config")(argv);
-  var compiler = webpack(config);
-
   var projectRoot = process.cwd();
-
   var port = process.env.PORT || argv.port;
+
+  // Add the auto-refresh client code to the front of each entry.
+  // The query url at the end is used to determine the address of the webpack server.
+  // var devClient = [require.resolve("../client/") + "?" + protocol + "://" + options.host + ":" + options.port];
+  var devClient = [require.resolve("webpack-dev-server/client/") + "?" + "http" + "://" + "127.0.0.1" + ":" + argv.port];
+
+  var entries = {};
+  Object.keys(config.entry).forEach(function(name) {
+    entries[name] = devClient.concat([config.entry[name]]);
+  });
+
+  config.entry = entries;
+  var compiler = webpack(config);
 
   new Server(compiler,{
     contentBase: projectRoot,

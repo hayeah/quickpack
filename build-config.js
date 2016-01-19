@@ -68,7 +68,9 @@ module.exports = function buildConfig(argv) {
     resolve: {
       root: projectRoot,
       modulesDirectories: [
-        path.join(projectRoot, 'node_modules'),
+        // path.join(projectRoot, 'node_modules'),
+        "web_modules",
+        "node_modules",
         path.join(__dirname, 'node_modules'),
       ],
       // Add `.ts` and `.tsx` as a resolvable extension.
