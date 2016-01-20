@@ -56,6 +56,14 @@ module.exports = function buildConfig(argv) {
 
   var extractCSS = new ExtractTextPlugin(disableHashing ? "app.css" : "app-[contenthash].css");
 
+  var production = argv.production === true || process.env.NODE_ENV == "production";
+
+  var cssLoader = "style-loader!css-loader!postcss-loader";
+  if(production) {
+    cssLoader = ExtractTextPlugin.extract("style-loader", "css-loader!postcss-loader");
+  }
+
+
   var config = {
     context: projectRoot,
 
@@ -105,7 +113,7 @@ module.exports = function buildConfig(argv) {
 
         {
           test: /\.css$/,
-          loader: ExtractTextPlugin.extract("style-loader", "css-loader!postcss-loader")
+          loader: cssLoader,
         },
 
         {
