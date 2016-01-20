@@ -2,6 +2,8 @@ var webpack = require("webpack");
 var Server = require("webpack-dev-server");
 
 function server(argv) {
+  argv.serverMode = true;
+
   var config = require("./build-config")(argv);
   var projectRoot = process.cwd();
   var port = process.env.PORT || argv.port;

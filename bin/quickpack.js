@@ -34,11 +34,20 @@ if (command === 'build') {
         type: 'boolean',
       },
 
+      t: {
+        alias: 'target',
+        describe: "build target",
+        default: 'web',
+        type: 'string',
+      },
+
 
     })
     .options(webpackOptions)
     .help('h')
     .alias("h","help")
+    .example("$0 build page2=./entry1 page2=./entry2 ", "Multiple entry files")
+    .example("$0 build app=./index.js --target=node", "Build for NodeJS")
     .argv
 
   require("../build")(argv);

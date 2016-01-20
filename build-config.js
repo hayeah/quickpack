@@ -63,6 +63,13 @@ module.exports = function buildConfig(argv) {
     cssLoader = ExtractTextPlugin.extract("style-loader", "css-loader!postcss-loader");
   }
 
+  // var hot = argv.target != "no"
+  var nodeMode = argv.target === "node";
+  var webMode = argv.target !== "node";
+
+  var serverMode = argv.serverMode === true;
+  var hotReloadMode = argv.serverMode === true;
+
 
   var config = {
     context: projectRoot,
@@ -95,7 +102,7 @@ module.exports = function buildConfig(argv) {
       ],
     },
 
-    devtool: "cheap-module-eval-source-map",
+    devtool: !nodeMode && "cheap-module-eval-source-map",
 
     module: {
       loaders: [
@@ -134,14 +141,14 @@ module.exports = function buildConfig(argv) {
       ]
     },
 
-    plugins: [
+    plugins: removeNulls([
       new webpack.optimize.OccurenceOrderPlugin(),
-      new webpack.HotModuleReplacementPlugin(),
-      new webpack.NoErrorsPlugin(),
+      hotReloadMode && new webpack.HotModuleReplacementPlugin(),
+      serverMode && new webpack.NoErrorsPlugin(),
 
       progressPlugin,
       extractCSS,
-    ],
+    ]),
 
     babel: {
       presets: removeNulls([
@@ -153,9 +160,9 @@ module.exports = function buildConfig(argv) {
 
       env: {
         development: {
-          presets: [
-            require('babel-preset-react-hmre'),
-          ],
+          presets: removeNulls([
+            hotReloadMode && require('babel-preset-react-hmre'),
+          ]),
         }
       }
 
@@ -164,6 +171,20 @@ module.exports = function buildConfig(argv) {
     postcss: [
       require('autoprefixer'),
     ],
+  }
+
+  // If target is node, don't pack node_modules stuff into the bundle.
+  if(nodeMode) {
+    config.target = "node";
+
+    var packageDependencies = require(path.join(projectRoot,"package.json")).dependencies || [];
+
+    var dependencies = {};
+    Object.keys(packageDependencies).forEach(mod => {
+      dependencies[mod] = "commonjs " + mod;
+    });
+
+    config.externals = dependencies;
   }
 
   if(argv.production) {
@@ -187,7 +208,7 @@ module.exports = function buildConfig(argv) {
 
 function removeNulls(array) {
   return array.filter(function(item) {
-     return item != null;
+     return Boolean(item);
   });
 }
 
