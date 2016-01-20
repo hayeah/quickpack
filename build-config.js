@@ -92,7 +92,13 @@ module.exports = function buildConfig(argv) {
         path.join(__dirname, 'node_modules'),
       ],
       // Add `.ts` and `.tsx` as a resolvable extension.
-      extensions: ['', '.webpack.js', '.web.js', '.ts', '.tsx', '.js', '.jsx','.css']
+      extensions: [
+        '', '.webpack.js',
+        '.web.js',
+        '.ts', '.tsx',
+        '.js', '.jsx',
+        '.css'
+      ]
     },
 
     resolveLoader: {
@@ -115,7 +121,7 @@ module.exports = function buildConfig(argv) {
         {
           test: /\.jsx?$/,
           exclude: /(node_modules|bower_components)/,
-          loader: 'babel', // 'babel-loader' is also a legal name to reference
+          loader: 'babel-loader',
         },
 
         {
@@ -127,6 +133,30 @@ module.exports = function buildConfig(argv) {
           test: /\.(png|jpg)$/,
           // loader: "file?name=[name].[hash].[ext]!url?limit=25000"
           loader: "url?limit=8192"
+        },
+
+        // Chaining loaders
+        // https://github.com/webpack/webpack/issues/482#issuecomment-56161239
+
+        {
+          test: /\.tsx?$/,
+          loader: 'ts-loader',
+          exclude: /(node_modules|bower_components)/,
+          loader: 'babel-loader',
+        },
+
+        {
+          test: /\.tsx?$/,
+          loader: 'ts-loader',
+          exclude: /node_modules/,
+          query: {
+            transpileOnly: true,
+            compilerOptions: {
+              module: "commonjs",
+              jsx: "react",
+              target: "es6",
+            },
+          },
         },
 
 
