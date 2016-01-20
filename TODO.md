@@ -1,8 +1,13 @@
 # dev server
 
-+ basic static server
+
++ http://matthewlehner.net/react-hot-module-replacement-with-webpack/
+  + hot module reload
+
++ nodejs output mode
++ typescript
 + proxy mode
-+ hot module reload
+
 
 # data-loader
 

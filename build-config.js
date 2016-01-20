@@ -3,6 +3,9 @@ quickpack a=./bar.js b=./baz.js  ... <outputDir>
 */
 
 var path = require("path");
+
+var webpack = require("webpack");
+
 var ProgressBar = require("progress");
 
 var ProgressPlugin = require("webpack/lib/ProgressPlugin");
@@ -124,15 +127,30 @@ module.exports = function buildConfig(argv) {
     },
 
     plugins: [
+      new webpack.optimize.OccurenceOrderPlugin(),
+      new webpack.HotModuleReplacementPlugin(),
+      new webpack.NoErrorsPlugin(),
+
       progressPlugin,
       extractCSS,
     ],
 
     babel: {
-      presets: [
+      presets: removeNulls([
+        // TODO should only activate in server mode, i guess...
+        // !argv.production && require('babel-preset-react-hmre'),
         require('babel-preset-es2015'),
         require('babel-preset-react'),
-      ]
+      ]),
+
+      env: {
+        development: {
+          presets: [
+            require('babel-preset-react-hmre'),
+          ],
+        }
+      }
+
     },
 
     postcss: [
@@ -157,6 +175,12 @@ module.exports = function buildConfig(argv) {
 
 
   return config;
+}
+
+function removeNulls(array) {
+  return array.filter(function(item) {
+     return item != null;
+  });
 }
 
 
