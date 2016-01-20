@@ -55,7 +55,7 @@ module.exports = function buildConfig(argv) {
 
   var input = argv._.slice(1)
 
-  var outputDir = path.join(projectRoot,"build");
+  var outputDir = path.join(projectRoot,argv.output);
 
   var disableHashing = argv.hash !== true;
 
@@ -85,7 +85,9 @@ module.exports = function buildConfig(argv) {
     output: {
       path: outputDir,
       filename: disableHashing ? "[name].js" : "[name]-[hash].js",
-      publicPath: "/build/",
+      // TODO: not sure what's a sane way to change public path...
+      publicPath:  "/build/",
+      // publicPath:  path.join("/build/"),
     },
 
     resolve: {

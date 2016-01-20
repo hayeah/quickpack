@@ -16,6 +16,13 @@ var webpackOptions = {
       type: 'boolean',
     },
 
+    o: {
+      alias: 'output',
+      describe: "Output directory",
+      default: "build",
+      type: 'string',
+    },
+
    "hash": {
       describe: "Enable long-term cache hashing",
       default: false,
