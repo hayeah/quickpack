@@ -95,7 +95,7 @@ module.exports = function buildConfig(argv) {
       ],
     },
 
-    devtool: "source-map",
+    devtool: "cheap-module-eval-source-map",
 
     module: {
       loaders: [
