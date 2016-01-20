@@ -36,7 +36,7 @@ if (command === 'build') {
 
       t: {
         alias: 'target',
-        describe: "build target",
+        describe: "Target platform",
         default: 'web',
         type: 'string',
       },
@@ -46,7 +46,9 @@ if (command === 'build') {
     .options(webpackOptions)
     .help('h')
     .alias("h","help")
-    .example("$0 build page2=./entry1 page2=./entry2 ", "Multiple entry files")
+    .example("$0 build entry.js", "Build entry.js")
+    .example("$0 build entry1.js entry1.js", "Build entries")
+    .example("$0 build page2=./entry1.js page2=./entry2.js ", "Multiple entry files with output names")
     .example("$0 build app=./index.js --target=node", "Build for NodeJS")
     .argv
 

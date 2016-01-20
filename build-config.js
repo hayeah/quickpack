@@ -39,6 +39,11 @@ function extractEntries(items) {
       var file = parts[1];
 
       entries[key] = file;
+    } else {
+      var ext = path.extname(item);
+      var filename = path.basename(item,ext);
+
+      entries[filename] = item;
     }
   });
 
