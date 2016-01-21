@@ -30,7 +30,13 @@ var webpackOptions = {
     },
 
     "source-map": {
-      describe: "Disable source map",
+      describe: "source map (dev only)",
+      default: true,
+      type: 'boolean',
+    },
+
+    "uglify": {
+      describe: "source map (production only)",
       default: true,
       type: 'boolean',
     }

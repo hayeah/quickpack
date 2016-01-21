@@ -115,7 +115,7 @@ module.exports = function buildConfig(argv) {
       ],
     },
 
-    devtool: argv["source-map"] === true && !nodeMode && "cheap-module-eval-source-map",
+    devtool: argv["source-map"] === true && !nodeMode && !production && "cheap-module-eval-source-map",
 
     module: {
       loaders: [
@@ -224,7 +224,7 @@ module.exports = function buildConfig(argv) {
     config.externals = dependencies;
   }
 
-  if(argv.production) {
+  if(production && argv.uglify === true) {
     config.plugins.push(new UglifyJsPlugin());
   }
 
