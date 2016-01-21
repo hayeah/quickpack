@@ -115,7 +115,7 @@ module.exports = function buildConfig(argv) {
       ],
     },
 
-    devtool: !nodeMode && "cheap-module-eval-source-map",
+    devtool: argv["source-map"] === true && !nodeMode && "cheap-module-eval-source-map",
 
     module: {
       loaders: [

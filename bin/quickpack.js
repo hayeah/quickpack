@@ -28,6 +28,12 @@ var webpackOptions = {
       default: false,
       type: 'boolean',
     },
+
+    "source-map": {
+      describe: "Disable source map",
+      default: true,
+      type: 'boolean',
+    }
 };
 
 if (command === 'build') {
@@ -59,6 +65,8 @@ if (command === 'build') {
     .example("$0 build app=./index.js --target=node", "Build for NodeJS")
     .argv
 
+  // console.log(argv);
+  // process.exit(1);
   require("../build")(argv);
 
 } else if (command === 'server'){
