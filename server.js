@@ -35,7 +35,8 @@ function server(argv) {
     contentBase: projectRoot,
     publicPath: config.output.publicPath,
     hot: true,
-    quiet: true,
+    stats: "normal",
+    // quiet: true,
   }).listen(port,function(err) {
     if(err) {
       console.error(err);
