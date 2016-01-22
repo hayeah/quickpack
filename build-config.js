@@ -212,19 +212,25 @@ module.exports = function buildConfig(argv) {
     ],
   }
 
+  var packageJSON = require(path.join(projectRoot,"package.json"));
+
+  // Treat all peer dependencies as external.
+  var externals = {};
+  Object.assign(externals,packageJSON.peerDependencies);
+
   // If target is node, don't pack node_modules stuff into the bundle.
   if(nodeMode) {
     config.target = "node";
-
-    var packageDependencies = require(path.join(projectRoot,"package.json")).dependencies || [];
-
-    var dependencies = {};
-    Object.keys(packageDependencies).forEach(mod => {
-      dependencies[mod] = "commonjs " + mod;
-    });
-
-    config.externals = dependencies;
+    Object.assign(externals,packageJSON.dependencies)
   }
+
+  var dependencies = {};
+  Object.keys(externals).forEach(mod => {
+    dependencies[mod] = "commonjs " + mod;
+  });
+
+  config.externals = dependencies;
+
 
   if(production && argv.uglify === true) {
     config.plugins.push(new UglifyJsPlugin());
