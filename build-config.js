@@ -115,7 +115,9 @@ module.exports = function buildConfig(argv) {
       ],
     },
 
-    devtool: argv["source-map"] === true && !nodeMode && !production && "cheap-module-eval-source-map",
+    // default: "cheap-module-eval-source-map"
+    // cheap-module-eval-source-map doesn't work for Safari
+    devtool: argv["source-map"] === true && !nodeMode && !production && argv["source-map-type"],
 
     module: {
       loaders: [

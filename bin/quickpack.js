@@ -35,6 +35,12 @@ var webpackOptions = {
       type: 'boolean',
     },
 
+    "source-map-type": {
+      describe: "source map type",
+      default: "cheap-module-eval-source-map",
+      type: 'string',
+    },
+
     "uglify": {
       describe: "source map (production only)",
       default: true,
