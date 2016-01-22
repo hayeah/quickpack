@@ -7,12 +7,8 @@ function report(err,stats) {
     return;
   }
 
-  if(stats.hasErrors) {
-    process.stdout.write(stats.toString({
-      errorDetails: true,
-      colors: require("supports-color"),
-    }));
-  }
+
+  process.stdout.write(stats.toString("normal"));
 }
 
 function build(argv) {

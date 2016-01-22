@@ -1,6 +1,8 @@
 var webpack = require("webpack");
 var Server = require("webpack-dev-server");
 
+
+
 function server(argv) {
   argv.serverMode = true;
 
@@ -27,16 +29,18 @@ function server(argv) {
   config.entry = entries;
   var compiler = webpack(config);
 
+  console.log("Starting server on: "+port);
+
   new Server(compiler,{
     contentBase: projectRoot,
     publicPath: config.output.publicPath,
     hot: true,
+    quiet: true,
   }).listen(port,function(err) {
     if(err) {
       console.error(err);
       process.exit(1);
     }
-    console.log("Listening on: "+port);
   });
 }
 
