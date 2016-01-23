@@ -41,6 +41,12 @@ var webpackOptions = {
       type: 'string',
     },
 
+    "library": {
+      describe: "Build as CommonJS module",
+      default: false,
+      type: 'boolean',
+    },
+
     "uglify": {
       describe: "source map (production only)",
       default: true,
