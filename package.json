@@ -29,6 +29,7 @@
     "babel-preset-react-hmre": "^1.0.1",
     "css-loader": "^0.23.1",
     "extract-text-webpack-plugin": "^1.0.1",
+    "merge-dirs": "^0.2.1",
     "postcss-loader": "^0.8.0",
     "progress": "^1.1.8",
     "react": "^0.14.6",
@@ -36,7 +37,7 @@
     "style-loader": "^0.13.0",
     "supports-color": "^3.1.2",
     "ts-loader": "^0.8.0",
-    "typescript": "^1.7.5",
+    "typescript": "^1.8.0-dev.20160122",
     "webpack-dev-server": "^1.14.1",
     "webpack-hot-middleware": "^2.6.0",
     "yargs": "^3.32.0"

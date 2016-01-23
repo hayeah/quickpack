@@ -4,9 +4,19 @@ var yargs = require('yargs')
   .usage('$0 command')
   .command('build', 'Builds the project.')
   .command('server', 'Start dev server.')
+  .command('setup', 'Copy baked configuration files. [experimental]')
   .demand(1, 'must provide a valid command'),
   argv = yargs.argv,
   command = argv._[0];
+
+var projectOptions = {
+  "project-root": {
+    alias: "r",
+    describe: "Project root",
+    default: process.cwd(),
+    type: 'string',
+  }
+};
 
 var webpackOptions = {
     p: {
@@ -51,7 +61,7 @@ var webpackOptions = {
       describe: "source map (production only)",
       default: true,
       type: 'boolean',
-    }
+    },
 };
 
 if (command === 'build') {
@@ -89,7 +99,7 @@ if (command === 'build') {
   // process.exit(1);
   require("../build")(argv);
 
-} else if (command === 'server'){
+} else if (command === 'server') {
   argv = yargs.reset()
     .usage('$0 server')
     .options({
@@ -106,6 +116,25 @@ if (command === 'build') {
     .wrap(yargs.terminalWidth())
     .argv
    require("../server")(argv);
+} else if (command === 'setup') {
+  argv = yargs.reset()
+    .usage('$0 setup')
+    .options({
+      f: {
+        alias: 'force',
+        describe: "Force overwrite config files",
+        default: false,
+        type: 'boolean',
+      },
+    })
+    .options(projectOptions)
+    .wrap(yargs.terminalWidth())
+    .help('h').alias("h","help")
+    .argv
+
+  // console.log(argv);
+  require("../setup")(argv);
+  // process.exit(1);
 } else {
   yargs.showHelp();
 }

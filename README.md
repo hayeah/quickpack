@@ -15,3 +15,16 @@ The following features are baked in:
 
 (Work in progress)
 
+# TypeScript [experimental]
+
+Should use TypeScript nightly. 1.8 has better support for JavaScript modules.
+
++ https://github.com/Microsoft/TypeScript/pull/5471
+
+QuickPack uses TypeScript 1.8 to compile `.ts` files. Run this command to configure VSCode:
+
+```
+qpack setup
+```
+
+Note: To force VSCode to use a particular version of TypeScript language service, see http://stackoverflow.com/a/32380584
