@@ -5,7 +5,13 @@ var yargs = require('yargs')
   .command('build', 'Builds the project.')
   .command('server', 'Start dev server.')
   .command('setup', 'Copy baked configuration files. [experimental]')
+  .version(function() {
+    return require('../package').version;
+  })
+  .alias("v","version")
   .demand(1, 'must provide a valid command'),
+
+
   argv = yargs.argv,
   command = argv._[0];
 
