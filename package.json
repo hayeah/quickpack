@@ -4,7 +4,8 @@
   "description": "",
   "main": "build-config.js",
   "bin": {
-    "quickpack": "./bin/quickpack.js"
+    "quickpack": "./bin/quickpack.js",
+    "qpack": "./bin/quickpack.js"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
