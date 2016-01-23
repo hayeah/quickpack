@@ -160,6 +160,7 @@ module.exports = function buildConfig(argv) {
           exclude: /node_modules/,
           query: {
             transpileOnly: true,
+            silent: true,
             compilerOptions: {
               module: "commonjs",
               jsx: "react",
