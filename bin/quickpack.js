@@ -78,9 +78,11 @@ if (command === 'build') {
     .help('h')
     .alias("h","help")
     .example("$0 build entry.js", "Build entry.js")
-    .example("$0 build entry1.js entry1.js", "Build entries")
-    .example("$0 build page2=./entry1.js page2=./entry2.js ", "Multiple entry files with output names")
-    .example("$0 build app=./index.js --target=node", "Build for NodeJS")
+    .example("$0 build entry1.js entry1.js", "Build multiple entries")
+    .example("$0 build page2=./entry1.js page2=./entry2.js ", "Multiple entries with output names")
+    .example("$0 build index.js --target=node", "Build for NodeJS")
+    .example("$0 build index.js --library", "Outout CommonJS module")
+    .wrap(yargs.terminalWidth())
     .argv
 
   // console.log(argv);
@@ -100,7 +102,9 @@ if (command === 'build') {
     .options(webpackOptions)
     .help('h')
     .example("PORT=4321 $0 server", "use ENV to specify port")
-    .alias("h","help").argv
+    .alias("h","help")
+    .wrap(yargs.terminalWidth())
+    .argv
    require("../server")(argv);
 } else {
   yargs.showHelp();
