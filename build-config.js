@@ -250,7 +250,7 @@ module.exports = function buildConfig(argv) {
 
   if(argv.library !== false) {
     // module.exports = xxx
-    module.output.libraryTarget = "commonjs2";
+    config.output.libraryTarget = "commonjs2";
   }
 
   return config;
