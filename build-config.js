@@ -88,9 +88,6 @@ module.exports = function buildConfig(argv) {
       // TODO: not sure what's a sane way to change public path...
       publicPath:  "/build/",
       // publicPath:  path.join("/build/"),
-
-      // module.exports = xxx
-      libraryTarget: argv.library == true && "commonjs2",
     },
 
     resolve: {
@@ -250,8 +247,15 @@ module.exports = function buildConfig(argv) {
     config.plugins.push(assetsPlugin);
   }
 
+  if(argv.library !== false) {
+    // module.exports = xxx
+    module.output.libraryTarget = "commonjs2";
+  }
+
   return config;
 }
+
+
 
 function removeNulls(array) {
   return array.filter(function(item) {
