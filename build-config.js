@@ -149,7 +149,6 @@ module.exports = function buildConfig(argv) {
 
         {
           test: /\.tsx?$/,
-          loader: 'ts-loader',
           exclude: /(node_modules|bower_components)/,
           loader: 'babel-loader',
         },
@@ -168,16 +167,6 @@ module.exports = function buildConfig(argv) {
             },
           },
         },
-
-
-
-
-        // {
-        //   test: /\.tsx?$/,
-        //   // exclude: /(node_modules|bower_components)/,
-        //   exclude: /node_modules/,
-        //   loader: "babel!ts?transpileOnly=true"
-        // },
       ]
     },
 
