@@ -110,8 +110,8 @@ if (command === 'build') {
     .usage('$0 server')
     .options({
       port: {
-        describe: 'port number',
-        default: 8000,
+        describe: 'port number (default: 8000)',
+        default: undefined,
         type: 'number',
       }
     })

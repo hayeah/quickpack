@@ -8,7 +8,7 @@ function server(argv) {
 
   var config = require("./build-config")(argv);
   var projectRoot = process.cwd();
-  var port = process.env.PORT || argv.port;
+  var port = argv.port || process.env.PORT || 8000;
 
   // Add the auto-refresh client code to the front of each entry.
   // The query url at the end is used to determine the address of the webpack server.
