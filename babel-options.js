@@ -1,7 +1,7 @@
 const ProgressBar = require("progress");
 
 function loadModulesWithProgress(modules) {
-  var bar = new ProgressBar(':bar [Loading :module]', {
+  var bar = new ProgressBar(':bar [(:n/:total) Loading :module]', {
     total: modules.length,
     width: 30,
     clear: true,
@@ -10,7 +10,10 @@ function loadModulesWithProgress(modules) {
   var loadedModules = {};
   modules.forEach((name,i) => {
     loadedModules[name] = require(name);
-    bar.tick(i,{module:name});
+    bar.tick(i,{
+      module:name,
+      n: i+1,
+    });
   });
 
   return loadedModules;
