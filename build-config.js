@@ -192,9 +192,8 @@ module.exports = function buildConfig(argv) {
 
     babel: {
       presets: removeNulls([
-        // TODO should only activate in server mode, i guess...
-        // !argv.production && require('babel-preset-react-hmre'),
         require('babel-preset-es2015'),
+        require("babel-preset-stage-1"),
         require('babel-preset-react'),
       ]),
 
