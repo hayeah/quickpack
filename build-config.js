@@ -50,6 +50,21 @@ function extractEntries(items) {
   return entries;
 }
 
+function modesFromOptions(argv) {
+  // var nodeMode = argv.target === "node";
+  // var webMode = argv.target !== "node";
+
+  // var serverMode = argv.serverMode === true;
+  // var hotReloadMode = argv.serverMode === true;
+  return {
+    node: argv.target === "node",
+    web: argv.target !== "node",
+
+    server: argv.serverMode === true,
+    hotReload: argv.serverMode === true,
+  };
+}
+
 module.exports = function buildConfig(argv) {
   var projectRoot = process.cwd();
 
@@ -68,13 +83,7 @@ module.exports = function buildConfig(argv) {
     cssLoader = ExtractTextPlugin.extract("style-loader", "css-loader!postcss-loader");
   }
 
-  // var hot = argv.target != "no"
-  var nodeMode = argv.target === "node";
-  var webMode = argv.target !== "node";
-
-  var serverMode = argv.serverMode === true;
-  var hotReloadMode = argv.serverMode === true;
-
+  var mode = modesFromOptions(argv);
 
   var config = {
     context: projectRoot,
@@ -117,7 +126,7 @@ module.exports = function buildConfig(argv) {
 
     // default: "cheap-module-eval-source-map"
     // cheap-module-eval-source-map doesn't work for Safari
-    devtool: argv["source-map"] === true && !nodeMode && !production && argv["source-map-type"],
+    devtool: argv["source-map"] === true && !mode.node && !production && argv["source-map-type"],
 
     module: {
       loaders: [
@@ -172,29 +181,14 @@ module.exports = function buildConfig(argv) {
 
     plugins: removeNulls([
       new webpack.optimize.OccurenceOrderPlugin(),
-      hotReloadMode && new webpack.HotModuleReplacementPlugin(),
-      serverMode && new webpack.NoErrorsPlugin(),
+      mode.hotReload && new webpack.HotModuleReplacementPlugin(),
+      mode.server && new webpack.NoErrorsPlugin(),
 
       progressPlugin,
       extractCSS,
     ]),
 
-    babel: {
-      presets: removeNulls([
-        require('babel-preset-es2015'),
-        require("babel-preset-stage-1"),
-        require('babel-preset-react'),
-      ]),
-
-      env: {
-        development: {
-          presets: removeNulls([
-            hotReloadMode && require('babel-preset-react-hmre'),
-          ]),
-        }
-      }
-
-    },
+    babel: require("./babel-options")(argv,mode),
 
     postcss: [
       require('autoprefixer'),
@@ -208,7 +202,7 @@ module.exports = function buildConfig(argv) {
   Object.assign(externals,packageJSON.peerDependencies);
 
   // If target is node, don't pack node_modules stuff into the bundle.
-  if(nodeMode) {
+  if(mode.node) {
     config.target = "node";
     Object.assign(externals,packageJSON.dependencies)
   }
