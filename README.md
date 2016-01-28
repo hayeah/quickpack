@@ -56,6 +56,8 @@ And you can change the output file names:
 quickpack build page1=entry1.js page2=entry2.js
 ```
 
+See: [Example Project](https://github.com/hayeah/quickpack/tree/master/example)
+
 # Fit For Production
 
 When building a C program for release, you don't think about what compiler optimizations to enable. You tell the compiler "please optimize the heck out of my program". Similiarly with `quickpack`, you simply turn on the `production` option:
