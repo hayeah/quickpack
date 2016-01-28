@@ -103,6 +103,51 @@ As new incompatible best practices emerge, a new major version will be released,
 
 By removing all configuration from projects, we can evolve the way we work by upgrading a single tool.
 
+# Help
+
+```
+$ quickpack build -h
+quickpack build page1=./entry1 page2=./entry2 ...
+
+Options:
+  -w, --watch        Watch mode                                                      [boolean] [default: false]
+  -t, --target       Target platform                                                  [string] [default: "web"]
+  -p, --production   Build for production environment                                [boolean] [default: false]
+  -o, --output       Output directory                                               [string] [default: "build"]
+  --hash             Enable long-term cache hashing                                  [boolean] [default: false]
+  --source-map       source map (dev only)                                            [boolean] [default: true]
+  --source-map-type  source map type                         [string] [default: "cheap-module-eval-source-map"]
+  --library          Build as CommonJS module                                        [boolean] [default: false]
+  --uglify           source map (production only)                                     [boolean] [default: true]
+  -h, --help         Show help                                                                        [boolean]
+
+Examples:
+  quickpack build entry.js                              Build entry.js
+  quickpack build entry1.js entry1.js                   Build multiple entries
+  quickpack build page2=./entry1.js page2=./entry2.js   Multiple entries with output names
+  quickpack build index.js --target=node                Build for NodeJS
+  quickpack build index.js --library                    Outout CommonJS module
+```
+
+```
+$ quickpack server -h
+quickpack server page1=./entry1 page2=./entry2 ...
+
+Options:
+  --port             port number (default: 8000)
+  -p, --production   Build for production environment                                [boolean] [default: false]
+  -o, --output       Output directory                                               [string] [default: "build"]
+  --hash             Enable long-term cache hashing                                  [boolean] [default: false]
+  --source-map       source map (dev only)                                            [boolean] [default: true]
+  --source-map-type  source map type                         [string] [default: "cheap-module-eval-source-map"]
+  --library          Build as CommonJS module                                        [boolean] [default: false]
+  --uglify           source map (production only)                                     [boolean] [default: true]
+  -h, --help         Show help                                                                        [boolean]
+
+Examples:
+  PORT=4321 quickpack server  use ENV to specify port
+```
+
 # Contribute
 
 Try quickpack for prototypes and personal projects.
