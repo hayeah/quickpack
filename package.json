@@ -1,6 +1,6 @@
 {
   "name": "quickpack",
-  "version": "0.3.2",
+  "version": "0.3.3",
   "description": "",
   "main": "build-config.js",
   "bin": {
@@ -13,7 +13,6 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
-
   "dependencies": {
     "babel-core": "^6.4.0",
     "babel-loader": "^6.2.1",
