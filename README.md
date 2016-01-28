@@ -1,27 +1,129 @@
-# A Zero Config Webpack Packager
+# The Quickest Way To Start Using Webpack
 
-Most frontend projects are pretty much the same, and it'd probably be easier to maintain the packager as a package that could be shared by all the frontend projects.
+Webpack is an incredibly capable tool, but the jungle of configuration options can be overwhelming for new comers.
+
+Quickpack is [omakase](http://david.heinemeierhansson.com/2012/rails-is-omakase.html). As long as your project follows a set of best practices, quickpack just works.
 
 ```
-quickpack a=./bar.js b=./baz.js  ... <outputDir>
+npm install quickpack -g
 ```
 
-The following features are baked in:
+Suppose your project entry file is `index.js`:
 
-+ PostCSS + AutoPrefixer.
-+ URL Loader.
-+ Babel ES6 & React.
-+ Long-term caching.
+```js
+// ES6 support with Babel.
+import React from "react";
+import {renderDOM} from "react-dom";
 
-(Work in progress)
+// PostCSS support with autoprefixer.
+import "normalize.css";
 
-# TypeScript [experimental]
+// CSS Module
+import style from "./App.css"
 
-Should use TypeScript nightly. 1.8 has better support for JavaScript modules.
+// JSX support
+class App extends React.Component {
+  render() {
+    return <div className={style.hello}>hello quickpack</div>;
+  }
+}
+
+renderDOM(<App/>,document.querySelector("#react-root"));
+```
+
+Quickpack can build this project without any configuration:
+
+```
+# Default output to build/index.js
+quickpack build index.js
+```
+
+And to watch the project, add the `--watch` flag:
+
+```
+quickpack build index.js --watch
+```
+
+To build multiple entry files simultaneously:
+
+```
+quickpack build entry1.js entry2.js
+```
+
+And you can change the output file names:
+
+```
+quickpack build page1=entry1.js page2=entry2.js
+```
+
+# Fit For Production
+
+When building a C program for release, you don't think about what compiler optimizations to enable. You tell the compiler "please optimize the heck out of my program". Similiarly with `quickpack`, you simply turn on the `production` option:
+
+```
+quickpack build index.js --production
+```
+
+Production mode enables these optimizations:
+
++ Minifying with uglify.
++ Static resource loading.
++ Extract CSS into separate files.
++ Long-term caching with unique md5 hash.
++ Chunk splitting (coming...).
+
+It would also disable development features like source map.
+
+# A Productive Development Environment
+
+Webpack already has sophisticated development tools. The only problem is getting all the tools to work! Quickpack gives you a productive development environment with one command:
+
+```
+# visit: localhost:8080/
+quickpack server index.js
+```
+
+No flags. No config. The server comes with these features:
+
++ Static server.
++ Fast source map.
++ Live-edit.
++ React Hot-Reload.
++ React error page.
+
+# Evolving Best Practices
+
+Even experienced Webpack users rely on various boilerplates to kickstart new projects. But as new best practices and new tools emerge, it's hard to upgrade old projects that grew out of boilerplates.
+
+Boilerplate projects are trapped in the best practices and tools of yesterday.
+
+Quickpack will makes sure that as long as you use the same major version, your project will keep working, even as new features are added.
+
+As new incompatible best practices emerge, a new major version will be released, perhaps with a [migration tool](https://blog.golang.org/introducing-gofix) to ease your upgrade.
+
+By removing all configuration from projects, we can evolve the way we work by upgrading a single tool.
+
+# Contribute
+
+Try quickpack for prototypes and personal projects.
+
+As of now, the set of "best practices" is not yet well defined. Before version 1, this tool is a summary of my personal preferences and quirks. Together we'll determine what the best practices are, and move this tool to version 1.
+
+Improve the build tool, and everybody benefits.
+
+### Experimental: NodeJS
+
++ It might not be a bad idea to build NodeJS projects with Webpack.
++ Electron turns out to be the best NodeJS debugger.
+
+
+### Experimental: TypeScript
+
+Should use TypeScript nightly. The upcoming 1.8 has better support for JavaScript modules.
 
 + https://github.com/Microsoft/TypeScript/pull/5471
 
-QuickPack uses TypeScript 1.8 to compile `.ts` files. Run this command to configure VSCode:
+Run this command to configure VSCode:
 
 ```
 qpack setup
