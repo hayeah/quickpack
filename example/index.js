@@ -1,3 +1,4 @@
+// ES6 Module + NPM
 import React from "react";
 import {render} from "react-dom";
 

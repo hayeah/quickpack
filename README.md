@@ -11,9 +11,9 @@ npm install quickpack -g
 Suppose your project entry file is `index.js`:
 
 ```js
-// ES6 support with Babel.
+// ES6 Module + NPM
 import React from "react";
-import {renderDOM} from "react-dom";
+import {render} from "react-dom";
 
 // PostCSS support with autoprefixer.
 import "normalize.css";
@@ -24,11 +24,13 @@ import style from "./App.css"
 // JSX support
 class App extends React.Component {
   render() {
-    return <div className={style.hello}>hello quickpack</div>;
+    return <span className={style.hello}>hello quickpack</span>;
   }
 }
 
-renderDOM(<App/>,document.querySelector("#react-root"));
+window.onload = () => {
+  render(<App/>,document.querySelector("#react-root"));
+};
 ```
 
 Quickpack can build this project without any configuration:
