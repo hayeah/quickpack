@@ -129,6 +129,12 @@ module.exports = function buildConfig(argv) {
     devtool: argv["source-map"] === true && !mode.node && !production && argv["source-map-type"],
 
     module: {
+      preLoaders: [{
+        test: /\.jsx?$/,
+        exclude: /(node_modules|bower_components)/,
+        loader: 'import-glob',
+      }],
+
       loaders: [
           // { test: /\.css$/, loader: "style!css" }
         {
