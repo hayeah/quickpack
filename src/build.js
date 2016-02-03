@@ -1,4 +1,4 @@
-var webpack = require("webpack");
+import webpack from "webpack";
 
 function report(err,stats) {
   if(err) {

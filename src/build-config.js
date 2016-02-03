@@ -135,7 +135,7 @@ module.exports = function buildConfig(argv) {
     resolveLoader: {
       "modulesDirectories": [
         // path.join(process.cwd(), 'node_modules'),
-        path.join(__dirname, 'node_modules')
+        path.join(__dirname, "..", 'node_modules')
       ],
     },
 
