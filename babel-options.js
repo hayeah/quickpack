@@ -1,7 +1,9 @@
 const ProgressBar = require("progress");
 
 function loadModulesWithProgress(modules) {
-  var bar = new ProgressBar(':bar [(:n/:total) Loading :module]', {
+  var usingTTY = isTTY();
+
+  var bar = usingTTY && new ProgressBar(':bar [(:n/:total) Loading :module]', {
     total: modules.length,
     width: 30,
     clear: true,
@@ -10,14 +12,25 @@ function loadModulesWithProgress(modules) {
   var loadedModules = {};
   modules.forEach((name,i) => {
     loadedModules[name] = require(name);
-    bar.tick(i,{
-      module:name,
-      n: i+1,
-    });
+    if(usingTTY) {
+      bar.tick(i,{
+        module:name,
+        n: i+1,
+      });
+    } else {
+      console.log("loaded",name);
+    }
+
   });
 
   return loadedModules;
 
+}
+
+var tty = require('tty');
+
+function isTTY() {
+  return tty.isatty(process.stdout.fd);
 }
 
 module.exports = function(argv,mode) {

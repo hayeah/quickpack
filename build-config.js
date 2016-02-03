@@ -128,6 +128,7 @@ module.exports = function buildConfig(argv) {
         '.ts', '.tsx',
         '.js', '.jsx',
         '.css', '.scss', '.less',
+        ".json",
       ]
     },
 
