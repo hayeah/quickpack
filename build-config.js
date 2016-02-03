@@ -83,6 +83,20 @@ module.exports = function buildConfig(argv) {
     cssLoader = ExtractTextPlugin.extract("style-loader", "css-loader!postcss-loader");
   }
 
+  var scssLoader = "style-loader!css-loader!sass-loader";
+  if(production) {
+    scssLoader = ExtractTextPlugin.extract("style-loader", "style-loader!css-loader!sass-loader");
+  }
+
+  var lessLoader = "style-loader!css-loader!less-loader";
+  if(production) {
+    lessLoader = ExtractTextPlugin.extract("style-loader", "style-loader!css-loader!less-loader");
+  }
+
+  lessLoader = ExtractTextPlugin.extract("style-loader", "style-loader!css-loader!less-loader");
+
+
+
   var mode = modesFromOptions(argv);
 
   var config = {
@@ -102,7 +116,7 @@ module.exports = function buildConfig(argv) {
     resolve: {
       root: projectRoot,
       modulesDirectories: [
-        // path.join(projectRoot, 'node_modules'),
+        path.join(projectRoot, 'node_modules'),
         "web_modules",
         "node_modules",
         path.join(__dirname, 'node_modules'),
@@ -113,7 +127,7 @@ module.exports = function buildConfig(argv) {
         '.web.js',
         '.ts', '.tsx',
         '.js', '.jsx',
-        '.css'
+        '.css', '.scss', '.less',
       ]
     },
 
@@ -151,6 +165,16 @@ module.exports = function buildConfig(argv) {
         {
           test: /\.css$/,
           loader: cssLoader,
+        },
+
+        {
+          test: /\.scss$/,
+          loader: scssLoader,
+        },
+
+        {
+          test: /\.less$/,
+          loader: lessLoader,
         },
 
         {
