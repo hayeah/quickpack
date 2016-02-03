@@ -3,8 +3,25 @@ var path = require("path");
 var mergedirs = require('merge-dirs').default;
 
 function linkConfig(argv) {
+
+
+  var tools = argv._.slice(1);
+
+  tools.forEach(tool => {
+    var setup = setupMap[tool];
+    if(setup) {
+      setup(argv);
+    } else {
+      console.log("Unsupported tool:",tool);
+    }
+  });
+
+}
+
+function setupTypeScript(argv) {
   var projectRoot = argv.projectRoot;
-  var configDir = path.join(__dirname,"configFiles");
+
+  var configDir = path.join(__dirname,"configFiles","typescript");
 
   // The ask option is crappy and horrible. Don't use.
   var conflictResolve = argv.force === true ? "overwrite" : "skip";
@@ -27,6 +44,10 @@ function linkConfig(argv) {
       }
     });
   }
+}
+
+var setupMap = {
+  "typescript": setupTypeScript,
 }
 
 function copy(src,dst) {

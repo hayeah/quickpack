@@ -124,7 +124,7 @@ if (command === 'build') {
    require("../server")(argv);
 } else if (command === 'setup') {
   argv = yargs.reset()
-    .usage('$0 setup')
+    .usage('$0 setup [tool]...')
     .options({
       f: {
         alias: 'force',
@@ -133,9 +133,11 @@ if (command === 'build') {
         type: 'boolean',
       },
     })
+    .require(1)
     .options(projectOptions)
     .wrap(yargs.terminalWidth())
     .help('h').alias("h","help")
+    .example("$0 setup typescript", "Dump TypeScript related config files")
     .argv
 
   // console.log(argv);
