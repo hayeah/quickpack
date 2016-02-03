@@ -113,11 +113,19 @@ if (command === 'build') {
         describe: 'port number (default: 8000)',
         default: undefined,
         type: 'number',
+      },
+
+      forward: {
+        alias: 'f',
+        describe: 'forward to backend server',
+        default: undefined,
+        type: 'string',
       }
     })
     .options(webpackOptions)
     .help('h')
     .example("PORT=4321 $0 server", "use ENV to specify port")
+    .example("$0 server -f http://localhost:7654", "forward request to backend server")
     .alias("h","help")
     .wrap(yargs.terminalWidth())
     .argv

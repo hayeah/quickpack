@@ -31,13 +31,25 @@ function server(argv) {
 
   console.log("Starting server on: "+port);
 
-  new Server(compiler,{
+  var serverOptions = {
     contentBase: projectRoot,
     publicPath: config.output.publicPath,
     hot: true,
     stats: "normal",
     // quiet: true,
-  }).listen(port,function(err) {
+  }
+
+  if(argv.forward != null) {
+    var backendHost = argv.forward;
+    serverOptions.proxy = {
+      '/*': {
+        target: backendHost,
+        secure: false,
+      },
+    }
+  }
+
+  new Server(compiler,serverOptions).listen(port,function(err) {
     if(err) {
       console.error(err);
       process.exit(1);
