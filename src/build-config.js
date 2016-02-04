@@ -1,17 +1,8 @@
 /* @flow */
 
-/*
-quickpack a=./bar.js b=./baz.js  ... <outputDir>
-*/
-
 var path = require("path");
 
 var webpack = require("webpack");
-
-var ProgressBar = require("progress");
-
-var ProgressPlugin = require("webpack/lib/ProgressPlugin");
-var UglifyJsPlugin = require("webpack/lib/optimize/UglifyJsPlugin");
 
 export type WebpackConfig = any;
 
@@ -55,80 +46,6 @@ type Entries = {
   [key:string]: string
 };
 
-var progressBar = new ProgressBar("[:msg] :bar",{
-  width: 50,
-  total: 100,
-})
-
-function configProgressReport(config: WebpackConfig): void {
-  let progressPlugin = new ProgressPlugin(function(percentage, msg) {
-    progressBar.update(percentage,{msg: msg || "done"});
-    if(percentage == 1) {
-      progressBar.terminate();
-    }
-    // console.log(percentage,msg);
-  });
-
-  config.plugins.push(progressPlugin);
-}
-
-function extractEntries(items) {
-  var entries = {};
-
-  items.forEach(function(item) {
-    if(item.indexOf("=") !== -1) {
-      var parts = item.split("=");
-      var key = parts[0];
-      var file = parts[1];
-
-      entries[key] = file;
-    } else {
-      var ext = path.extname(item);
-      var filename = path.basename(item,ext);
-
-      entries[filename] = item;
-    }
-  });
-
-  return entries;
-}
-
-function configResolve(config:WebpackConfig,options:QuickPackOptions,mode) {
-  const {projectRoot} = options;
-
-  let resolve = {
-    root: projectRoot,
-    modulesDirectories: [
-      path.join(projectRoot, 'node_modules'),
-      "web_modules",
-      "node_modules",
-      path.join(__dirname, 'node_modules'),
-    ],
-
-    // Add `.ts` and `.tsx` as a resolvable extension.
-    extensions: [
-      '', '.webpack.js',
-      '.web.js',
-      '.ts', '.tsx',
-      '.js', '.jsx',
-      '.css', '.scss', '.less',
-      ".json",
-    ]
-  };
-
-  config.resolve = resolve;
-
-  let resolveLoader = {
-    "modulesDirectories": [
-      // path.join(process.cwd(), 'node_modules'),
-      path.join(__dirname, "..", 'node_modules')
-    ],
-  };
-
-
-  config.resolveLoader = resolveLoader;
-}
-
 function configOutput(config:WebpackConfig,options:QuickPackOptions) {
   const {projectRoot,output} = options;
 
@@ -143,29 +60,6 @@ function configOutput(config:WebpackConfig,options:QuickPackOptions) {
   }
 }
 
-function configExternals(config:WebpackConfig,options:QuickPackOptions): void {
-  const {projectRoot,target} = options;
-  let packageJSONPath = path.join(projectRoot,"package.json");
-  // $FlowOK
-  let packageJSON = require(packageJSONPath);
-
-  // Treat all peer dependencies as external.
-  var externals = {};
-  Object.assign(externals,packageJSON.peerDependencies);
-
-  // If target is node, don't pack node_modules stuff into the bundle.
-  if(target === "node") {
-    Object.assign(externals,packageJSON.dependencies)
-  }
-
-  var dependencies = {};
-  Object.keys(externals).forEach(mod => {
-    dependencies[mod] = "commonjs " + mod;
-  });
-
-  config.externals = dependencies;
-}
-
 function devtool(config:WebpackConfig,options:QuickPackOptions) {
   const {sourceMap, sourceMapType, target, production} = options;
   if(sourceMap && !production) {
@@ -173,16 +67,30 @@ function devtool(config:WebpackConfig,options:QuickPackOptions) {
   }
 }
 
-function configProduction(config:WebpackConfig,options:QuickPackOptions): void {
-  config.plugins.push(new webpack.optimize.OccurenceOrderPlugin());
+function configStaticResources(config:WebpackConfig, options:QuickPackOptions) {
+  let loaders = [
+    {
+      test: /\.json$/,
+      loader: "json"
+    },
 
-  if(options.useUglify) {
-    config.plugins.push(new UglifyJsPlugin());
-  }
+    {
+      test: /\.(png|jpg)$/,
+      // loader: "file?name=[name].[hash].[ext]!url?limit=25000"
+      loader: "url?limit=8192"
+    },
+  ];
+
+  config.module.loaders.push(...loaders);
 }
 
 import configCSS from "./config/css";
 import configBabel from "./config/babel";
+import configExternals from "./config/externals";
+import configResolve from "./config/resolve";
+import configProgressReport from "./config/progressReport";
+import configProduction from "./config/production";
+import configTypeScript from "./config/typescript";
 
 export function buildConfig(target:Target,entries:Entries,argv:QuickPackOptions): WebpackConfig {
   let options = normalizeQuickPackOptions(target,argv);
@@ -206,11 +114,14 @@ export function buildConfig(target:Target,entries:Entries,argv:QuickPackOptions)
     configOutput,
     devtool,
 
-    // ES6, jsx
+    // ES6. js, jsx
     configBabel,
+    // TypeScript. ts, tsx
+    configTypeScript,
 
     configCSS,
 
+    configStaticResources,
     configExternals,
     configProgressReport,
   ].forEach(fn => {
@@ -250,46 +161,11 @@ export function buildConfig(target:Target,entries:Entries,argv:QuickPackOptions)
 //
 //       loaders: [
 //           // { test: /\.css$/, loader: "style!css" }
-//         {
-//           test: /\.json$/,
-//           loader: "json"
-//         },
 //
-
-//         {
-//           test: /\.(png|jpg)$/,
-//           // loader: "file?name=[name].[hash].[ext]!url?limit=25000"
-//           loader: "url?limit=8192"
-//         },
-//
-//         // Chaining loaders
-//         // https://github.com/webpack/webpack/issues/482#issuecomment-56161239
-//
-//         {
-//           test: /\.tsx?$/,
-//           // exclude: /(node_modules|bower_components)/,
-//           loader: 'babel-loader',
-//         },
-//
-//         {
-//           test: /\.tsx?$/,
-//           loader: 'ts-loader',
-//           // exclude: /node_modules/,
-//           query: {
-//             transpileOnly: true,
-//             silent: true,
-//             compilerOptions: {
-//               module: "commonjs",
-//               jsx: "react",
-//               target: "es6",
-//             },
-//           },
-//         },
 //       ]
 //     },
 //
 //     plugins: removeNulls([
-//       new webpack.optimize.OccurenceOrderPlugin(),
 //       mode.hotReload && new webpack.HotModuleReplacementPlugin(),
 //       mode.server && new webpack.NoErrorsPlugin(),
 //     ]),
