@@ -166,27 +166,11 @@ function configExternals(config:WebpackConfig,options:QuickPackOptions): void {
   config.externals = dependencies;
 }
 
-import {configBabel} from "./babel-options";
-
 function devtool(config:WebpackConfig,options:QuickPackOptions) {
   const {sourceMap, sourceMapType, target, production} = options;
   if(sourceMap && !production) {
     config.devtool = sourceMapType;
   }
-}
-
-function babel(config:WebpackConfig,options:QuickPackOptions):void {
-  let loaders = [
-    {
-      test: /\.jsx?$/,
-      exclude: /(node_modules|bower_components)/,
-      loader: 'babel-loader',
-    }
-  ];
-
-  config.module.loaders.push(...loaders);
-
-  config.babel = configBabel(options);
 }
 
 function configProduction(config:WebpackConfig,options:QuickPackOptions): void {
@@ -198,6 +182,7 @@ function configProduction(config:WebpackConfig,options:QuickPackOptions): void {
 }
 
 import configCSS from "./config/css";
+import configBabel from "./config/babel";
 
 export function buildConfig(target:Target,entries:Entries,argv:QuickPackOptions): WebpackConfig {
   let options = normalizeQuickPackOptions(target,argv);
@@ -222,7 +207,7 @@ export function buildConfig(target:Target,entries:Entries,argv:QuickPackOptions)
     devtool,
 
     // ES6, jsx
-    // babel,
+    configBabel,
 
     configCSS,
 

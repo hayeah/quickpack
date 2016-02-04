@@ -1,10 +1,12 @@
 /* @flow */
 
-import type {QuickPackOptions} from "./build-config";
+import type {WebpackConfig, QuickPackOptions} from "../build-config";
 import tty from 'tty';
 import ProgressBar from "progress";
 
-function loadModulesWithProgress(modules: Array<string>): void {
+
+
+function loadModulesWithProgress(modules: Array<string>): Array<any> {
   var usingTTY = isTTY();
 
   var bar: any = usingTTY && new ProgressBar(':bar [(:n/:total) Loading :module]', {
@@ -13,10 +15,11 @@ function loadModulesWithProgress(modules: Array<string>): void {
     clear: true,
   });
 
-  var loadedModules = {};
+  let loadedModules = [];
   modules.forEach((name,i) => {
     // $FlowOK
-    loadedModules[name] = require(name);
+    let mod = require(name)
+    loadedModules.push(mod);
     if(usingTTY) {
       bar.tick(i,{
         module:name,
@@ -28,7 +31,7 @@ function loadModulesWithProgress(modules: Array<string>): void {
 
   });
 
-  // return loadedModules;
+  return loadedModules;
 }
 
 function isTTY() {
@@ -36,28 +39,39 @@ function isTTY() {
   return tty.isatty(process.stdout.fd);
 }
 
-export function configBabel(options: QuickPackOptions): void {
-  const {useHotReload} = options;
-
-  var deps = [
+function loadBabelPluginsWithProgress() {
+  const plugins = [
     "babel-loader",
     'babel-preset-es2015',
     "babel-preset-stage-1",
     'babel-preset-react',
   ];
 
-  // var loadedDeps =
-  loadModulesWithProgress(deps);
+  return loadModulesWithProgress(plugins);
+}
 
-  var options = {
-    presets: removeNulls([
-      // $FlowOK
-      require('babel-preset-es2015'),
-      // $FlowOK
-      require("babel-preset-stage-1"),
-      // $FlowOK
-      require('babel-preset-react'),
-    ]),
+export default function configBabel(config: WebpackConfig, options: QuickPackOptions): void {
+  const {useHotReload} = options;
+
+  let [babelLoader,...babelPresets] = loadModulesWithProgress([
+    "babel-loader", // preload babel-loader
+    'babel-preset-es2015',
+    "babel-preset-stage-1",
+    'babel-preset-react'
+  ]);
+
+  let loaders = [
+    {
+      test: /\.jsx?$/,
+      exclude: /(node_modules|bower_components)/,
+      loader: 'babel-loader',
+    }
+  ];
+
+  config.module.loaders.push(...loaders);
+
+  config.babel = {
+    presets: babelPresets,
 
     plugins: [
     ],
