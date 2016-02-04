@@ -32,6 +32,7 @@ export type QuickPackOptions = {
   useWatch: boolean,
   useHotReload: boolean,
   useServer: boolean,
+  useUglify: boolean,
 };
 
 // massage the CLI arguments a bit...
@@ -41,6 +42,7 @@ export function normalizeQuickPackOptions(target:Target,argv:any): QuickPackOpti
     projectRoot: process.cwd(),
     useHotReload: argv.server === true,
     useWatch: argv.watch === true,
+    useUglify: argv.uglify === true,
   },argv);
 
   return options;
@@ -88,21 +90,6 @@ function extractEntries(items) {
   });
 
   return entries;
-}
-
-function modesFromOptions(argv) {
-  // var nodeMode = argv.target === "node";
-  // var webMode = argv.target !== "node";
-
-  // var serverMode = argv.serverMode === true;
-  // var hotReloadMode = argv.serverMode === true;
-  return {
-    node: argv.target === "node",
-    web: argv.target !== "node",
-
-    server: argv.serverMode === true,
-    hotReload: argv.serverMode === true,
-  };
 }
 
 function configResolve(config:WebpackConfig,options:QuickPackOptions,mode) {
@@ -201,10 +188,18 @@ function babel(config:WebpackConfig,options:QuickPackOptions):void {
   config.babel = configBabel(options);
 }
 
+function configProduction(config:WebpackConfig,options:QuickPackOptions): void {
+  config.plugins.push(new webpack.optimize.OccurenceOrderPlugin());
+
+  if(options.useUglify) {
+    config.plugins.push(new UglifyJsPlugin());
+  }
+}
+
 export function buildConfig(target:Target,entries:Entries,argv:QuickPackOptions): WebpackConfig {
   let options = normalizeQuickPackOptions(target,argv);
 
-  const {projectRoot} = options;
+  const {projectRoot, production} = options;
 
   let config: WebpackConfig = {
     context: projectRoot,
@@ -231,6 +226,14 @@ export function buildConfig(target:Target,entries:Entries,argv:QuickPackOptions)
   ].forEach(fn => {
     fn(config,options);
   });
+
+  if(production) {
+    [
+      configProduction
+    ].forEach(fn => {
+      fn(config,options);
+    });
+  }
 
   return config;
 }
