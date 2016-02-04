@@ -13,11 +13,7 @@ var ProgressBar = require("progress");
 var ProgressPlugin = require("webpack/lib/ProgressPlugin");
 var UglifyJsPlugin = require("webpack/lib/optimize/UglifyJsPlugin");
 
-var AssetsPlugin = require('assets-webpack-plugin');
-
-var ExtractTextPlugin = require("extract-text-webpack-plugin");
-
-type WebpackConfig = any;
+export type WebpackConfig = any;
 
 export type QuickPackOptions = {
   projectRoot: string,
@@ -29,6 +25,7 @@ export type QuickPackOptions = {
 
   production: boolean,
 
+  useProduction: boolean,
   useWatch: boolean,
   useHotReload: boolean,
   useServer: boolean,
@@ -36,10 +33,14 @@ export type QuickPackOptions = {
 };
 
 // massage the CLI arguments a bit...
-export function normalizeQuickPackOptions(target:Target,argv:any): QuickPackOptions {
+export function normalizeQuickPackOptions(target:Target, argv:any): QuickPackOptions {
+  // var production = argv.production === true || process.env.NODE_ENV == "production";
+
   let options = Object.assign({},{
     target,
     projectRoot: process.cwd(),
+
+    useProduction: argv.production === true || process.env.NODE_ENV == "production",
     useHotReload: argv.server === true,
     useWatch: argv.watch === true,
     useUglify: argv.uglify === true,
@@ -196,6 +197,8 @@ function configProduction(config:WebpackConfig,options:QuickPackOptions): void {
   }
 }
 
+import configCSS from "./config/css";
+
 export function buildConfig(target:Target,entries:Entries,argv:QuickPackOptions): WebpackConfig {
   let options = normalizeQuickPackOptions(target,argv);
 
@@ -221,6 +224,8 @@ export function buildConfig(target:Target,entries:Entries,argv:QuickPackOptions)
     // ES6, jsx
     // babel,
 
+    configCSS,
+
     configExternals,
     configProgressReport,
   ].forEach(fn => {
@@ -239,58 +244,17 @@ export function buildConfig(target:Target,entries:Entries,argv:QuickPackOptions)
 }
 
 // function _buildConfig(argv:QuickPackOptions) {
-//   var projectRoot = process.cwd();
-//
-//   argv.projectRoot = projectRoot;
 //
 //   var input = argv._.slice(1)
 //
-//   var outputDir = path.join(projectRoot,argv.output);
 //
 //   var disableHashing = argv.hash !== true;
 //
-//   var extractCSS = new ExtractTextPlugin(disableHashing ? "app.css" : "app-[contenthash].css");
-//
-//   var production = argv.production === true || process.env.NODE_ENV == "production";
-//
-//   var cssLoader = "style-loader!css-loader!postcss-loader";
-//   if(production) {
-//     cssLoader = ExtractTextPlugin.extract("style-loader", "css-loader!postcss-loader");
-//   }
-//
-//   var scssLoader = "style-loader!css-loader!sass-loader";
-//   if(production) {
-//     scssLoader = ExtractTextPlugin.extract("style-loader", "style-loader!css-loader!sass-loader");
-//   }
-//
-//   var lessLoader = "style-loader!css-loader!less-loader";
-//   if(production) {
-//     lessLoader = ExtractTextPlugin.extract("style-loader", "style-loader!css-loader!less-loader");
-//   }
-//
-//   lessLoader = ExtractTextPlugin.extract("style-loader", "style-loader!css-loader!less-loader");
 //
 //
-//
-//   var mode = modesFromOptions(argv);
 //
 //   var config = {
-//     context: projectRoot,
-//
-//     // a=./bar.js b=./baz.js
-//     entry: extractEntries(input),
-//
-//     output: {
-//       path: outputDir,
-//       filename: disableHashing ? "[name].js" : "[name]-[hash].js",
-//       // TODO: not sure what's a sane way to change public path...
-//       publicPath:  "/build/",
-//       // publicPath:  path.join("/build/"),
-//     },
-//
-//     // default: "cheap-module-eval-source-map"
-//     // cheap-module-eval-source-map doesn't work for Safari
-//     devtool: argv["source-map"] === true && !mode.node && !production && argv["source-map-type"],
+
 //
 //     module: {
 //       preLoaders: [{
@@ -306,27 +270,7 @@ export function buildConfig(target:Target,entries:Entries,argv:QuickPackOptions)
 //           loader: "json"
 //         },
 //
-//         {
-//           test: /\.jsx?$/,
-//           exclude: /(node_modules|bower_components)/,
-//           loader: 'babel-loader',
-//         },
-//
-//         {
-//           test: /\.css$/,
-//           loader: cssLoader,
-//         },
-//
-//         {
-//           test: /\.scss$/,
-//           loader: scssLoader,
-//         },
-//
-//         {
-//           test: /\.less$/,
-//           loader: lessLoader,
-//         },
-//
+
 //         {
 //           test: /\.(png|jpg)$/,
 //           // loader: "file?name=[name].[hash].[ext]!url?limit=25000"
@@ -363,54 +307,13 @@ export function buildConfig(target:Target,entries:Entries,argv:QuickPackOptions)
 //       new webpack.optimize.OccurenceOrderPlugin(),
 //       mode.hotReload && new webpack.HotModuleReplacementPlugin(),
 //       mode.server && new webpack.NoErrorsPlugin(),
-//
-//       progressPlugin,
-//       extractCSS,
 //     ]),
 //
-//     babel: require("./babel-options")(argv,mode),
-//
-//     postcss: [
-//       require('autoprefixer'),
-//     ],
+
 //   }
 //
 //   configureResolve(config,argv,mode);
 //
-//   var packageJSON = require(path.join(projectRoot,"package.json"));
-//
-//   // Treat all peer dependencies as external.
-//   var externals = {};
-//   Object.assign(externals,packageJSON.peerDependencies);
-//
-//   // If target is node, don't pack node_modules stuff into the bundle.
-//   if(mode.node) {
-//     config.target = "node";
-//     Object.assign(externals,packageJSON.dependencies)
-//   }
-//
-//   var dependencies = {};
-//   Object.keys(externals).forEach(mod => {
-//     dependencies[mod] = "commonjs " + mod;
-//   });
-//
-//   config.externals = dependencies;
-//
-//
-//   if(production && argv.uglify === true) {
-//     config.plugins.push(new UglifyJsPlugin());
-//   }
-//
-//
-//   // https://github.com/sporto/assets-webpack-plugin
-//   if(!disableHashing) {
-//     var assetsPlugin = new AssetsPlugin({
-//       filename: "assets.json",
-//       path: outputDir,
-//       prettyPrint: true,
-//     });
-//     config.plugins.push(assetsPlugin);
-//   }
 //
 //   if(argv.library !== false) {
 //     // module.exports = xxx
