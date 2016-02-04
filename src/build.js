@@ -17,6 +17,7 @@ import {buildConfig} from "./build-config";
 import {extractEntriesFromArguments} from "./processEntries";
 
 function build(argv:any) {
+  console.log(argv);
 
   let options: QuickPackOptions = argv;
   let items = argv._.slice(1);

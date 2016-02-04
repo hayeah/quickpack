@@ -29,13 +29,24 @@ export type QuickPackOptions = {
 
   production: boolean,
 
-  watch: boolean,
-
+  useWatch: boolean,
   useHotReload: boolean,
   useServer: boolean,
 };
 
-type Target = "web" | "node" | "commonjs";
+// massage the CLI arguments a bit...
+export function normalizeQuickPackOptions(target:Target,argv:any): QuickPackOptions {
+  let options = Object.assign({},{
+    target,
+    projectRoot: process.cwd(),
+    useHotReload: argv.server === true,
+    useWatch: argv.watch === true,
+  },argv);
+
+  return options;
+}
+
+type Target = "web" | "node";
 
 type Entries = {
   [key:string]: string
@@ -92,10 +103,6 @@ function modesFromOptions(argv) {
     server: argv.serverMode === true,
     hotReload: argv.serverMode === true,
   };
-}
-
-function foo() {
-  return 10;
 }
 
 function configResolve(config:WebpackConfig,options:QuickPackOptions,mode) {
@@ -194,16 +201,13 @@ function babel(config:WebpackConfig,options:QuickPackOptions):void {
   config.babel = configBabel(options);
 }
 
-export function buildConfig(target:Target,entries:Entries,options:QuickPackOptions): WebpackConfig {
-  // massage the options a bit...
-  options = Object.assign({},{
-    target,
-    projectRoot: process.cwd(),
-    useHotReload: options.useServer === true,
-  },options);
+export function buildConfig(target:Target,entries:Entries,argv:QuickPackOptions): WebpackConfig {
+  let options = normalizeQuickPackOptions(target,argv);
+
+  const {projectRoot} = options;
 
   let config: WebpackConfig = {
-    context: options.projectRoot,
+    context: projectRoot,
     target: target,
     entry: entries,
 
