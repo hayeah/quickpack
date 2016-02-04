@@ -1,3 +1,6 @@
+/* @flow */
+
+import type {QuickPackOptions} from "./build-config";
 import webpack from "webpack";
 
 function report(err,stats) {
@@ -7,15 +10,28 @@ function report(err,stats) {
     return;
   }
 
-
   process.stdout.write(stats.toString("normal"));
 }
 
-function build(argv) {
-  var config = require("./build-config")(argv);
-  var compiler = webpack(config);
+import {buildConfig} from "./build-config";
+import {extractEntriesFromArguments} from "./processEntries";
 
-  if(argv.watch == true) {
+function build(argv:any) {
+
+  let options: QuickPackOptions = argv;
+  let items = argv._.slice(1);
+  let compilations = extractEntriesFromArguments(items);
+
+  let multiconfig = Object.keys(compilations).map(target => {
+    let entries = compilations[target];
+    return buildConfig(target,entries,argv);
+  });
+
+  console.log(multiconfig);
+
+  var compiler = webpack(multiconfig);
+
+  if(options.watch == true) {
     compiler.watch({ // watch options:
       aggregateTimeout: 300, // wait so long for more changes
       // poll: false // use polling instead of native watchers
@@ -29,5 +45,3 @@ function build(argv) {
 module.exports = build;
 
 // TODO: check that it's a npm project. Or who cares ¯\_(ツ)_/¯
-
-

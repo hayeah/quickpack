@@ -1,9 +1,13 @@
-const ProgressBar = require("progress");
+/* @flow */
 
-function loadModulesWithProgress(modules) {
+import type {QuickPackOptions} from "./build-config";
+import tty from 'tty';
+import ProgressBar from "progress";
+
+function loadModulesWithProgress(modules: Array<string>): void {
   var usingTTY = isTTY();
 
-  var bar = usingTTY && new ProgressBar(':bar [(:n/:total) Loading :module]', {
+  var bar: any = usingTTY && new ProgressBar(':bar [(:n/:total) Loading :module]', {
     total: modules.length,
     width: 30,
     clear: true,
@@ -11,6 +15,7 @@ function loadModulesWithProgress(modules) {
 
   var loadedModules = {};
   modules.forEach((name,i) => {
+    // $FlowOK
     loadedModules[name] = require(name);
     if(usingTTY) {
       bar.tick(i,{
@@ -23,20 +28,16 @@ function loadModulesWithProgress(modules) {
 
   });
 
-  return loadedModules;
-
+  // return loadedModules;
 }
 
-var tty = require('tty');
-
 function isTTY() {
+  // $FlowOK
   return tty.isatty(process.stdout.fd);
 }
 
-module.exports = function(argv,mode) {
-
-
-  var hotReloadMode = argv.serverMode === true;
+export function configBabel(options: QuickPackOptions): void {
+  const {useHotReload} = options;
 
   var deps = [
     "babel-loader",
@@ -50,8 +51,11 @@ module.exports = function(argv,mode) {
 
   var options = {
     presets: removeNulls([
+      // $FlowOK
       require('babel-preset-es2015'),
+      // $FlowOK
       require("babel-preset-stage-1"),
+      // $FlowOK
       require('babel-preset-react'),
     ]),
 
@@ -61,13 +65,13 @@ module.exports = function(argv,mode) {
     env: {
       development: {
         presets: removeNulls([
-          hotReloadMode && require('babel-preset-react-hmre'),
+          useHotReload &&
+          // $FlowOK
+          require('babel-preset-react-hmre'),
         ]),
       }
     }
   };
-
-  return options;
 }
 
 function removeNulls(array) {
@@ -75,5 +79,3 @@ function removeNulls(array) {
      return Boolean(item);
   });
 }
-
-
