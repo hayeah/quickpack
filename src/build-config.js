@@ -65,8 +65,46 @@ function modesFromOptions(argv) {
   };
 }
 
+function configureResolve(config,options,mode) {
+  const {projectRoot} = options;
+
+  let resolve = {
+    root: projectRoot,
+    modulesDirectories: [
+      path.join(projectRoot, 'node_modules'),
+      "web_modules",
+      "node_modules",
+      path.join(__dirname, 'node_modules'),
+    ],
+
+    // Add `.ts` and `.tsx` as a resolvable extension.
+    extensions: [
+      '', '.webpack.js',
+      '.web.js',
+      '.ts', '.tsx',
+      '.js', '.jsx',
+      '.css', '.scss', '.less',
+      ".json",
+    ]
+  };
+
+  config.resolve = resolve;
+
+  let resolveLoader = {
+    "modulesDirectories": [
+      // path.join(process.cwd(), 'node_modules'),
+      path.join(__dirname, "..", 'node_modules')
+    ],
+  };
+
+
+  config.resolveLoader = resolveLoader;
+}
+
 module.exports = function buildConfig(argv) {
   var projectRoot = process.cwd();
+
+  argv.projectRoot = projectRoot;
 
   var input = argv._.slice(1)
 
@@ -111,32 +149,6 @@ module.exports = function buildConfig(argv) {
       // TODO: not sure what's a sane way to change public path...
       publicPath:  "/build/",
       // publicPath:  path.join("/build/"),
-    },
-
-    resolve: {
-      root: projectRoot,
-      modulesDirectories: [
-        path.join(projectRoot, 'node_modules'),
-        "web_modules",
-        "node_modules",
-        path.join(__dirname, 'node_modules'),
-      ],
-      // Add `.ts` and `.tsx` as a resolvable extension.
-      extensions: [
-        '', '.webpack.js',
-        '.web.js',
-        '.ts', '.tsx',
-        '.js', '.jsx',
-        '.css', '.scss', '.less',
-        ".json",
-      ]
-    },
-
-    resolveLoader: {
-      "modulesDirectories": [
-        // path.join(process.cwd(), 'node_modules'),
-        path.join(__dirname, "..", 'node_modules')
-      ],
     },
 
     // default: "cheap-module-eval-source-map"
@@ -225,6 +237,8 @@ module.exports = function buildConfig(argv) {
       require('autoprefixer'),
     ],
   }
+
+  configureResolve(config,argv,mode);
 
   var packageJSON = require(path.join(projectRoot,"package.json"));
 
