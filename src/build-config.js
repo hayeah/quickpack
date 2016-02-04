@@ -201,14 +201,14 @@ module.exports = function buildConfig(argv) {
 
         {
           test: /\.tsx?$/,
-          exclude: /(node_modules|bower_components)/,
+          // exclude: /(node_modules|bower_components)/,
           loader: 'babel-loader',
         },
 
         {
           test: /\.tsx?$/,
           loader: 'ts-loader',
-          exclude: /node_modules/,
+          // exclude: /node_modules/,
           query: {
             transpileOnly: true,
             silent: true,
