@@ -46,44 +46,6 @@ type Entries = {
   [key:string]: string
 };
 
-function configOutput(config:WebpackConfig,options:QuickPackOptions) {
-  const {projectRoot,output} = options;
-
-  // TODO check if output path is absolute path
-  config.output = {
-    path: path.join(projectRoot,output),
-    // filename: disableHashing ? "[name].js" : "[name]-[hash].js",
-    filename: "[name].js",
-    // TODO: not sure what's a sane way to change public path...
-    publicPath:  "/build/",
-    // publicPath:  path.join("/build/"),
-  }
-}
-
-function devtool(config:WebpackConfig,options:QuickPackOptions) {
-  const {sourceMap, sourceMapType, target, production} = options;
-  if(sourceMap && !production) {
-    config.devtool = sourceMapType;
-  }
-}
-
-function configStaticResources(config:WebpackConfig, options:QuickPackOptions) {
-  let loaders = [
-    {
-      test: /\.json$/,
-      loader: "json"
-    },
-
-    {
-      test: /\.(png|jpg)$/,
-      // loader: "file?name=[name].[hash].[ext]!url?limit=25000"
-      loader: "url?limit=8192"
-    },
-  ];
-
-  config.module.loaders.push(...loaders);
-}
-
 import configCSS from "./config/css";
 import configBabel from "./config/babel";
 import configExternals from "./config/externals";
@@ -112,7 +74,7 @@ export function buildConfig(target:Target,entries:Entries,argv:QuickPackOptions)
   [
     configResolve,
     configOutput,
-    devtool,
+    configSourceMap,
 
     // ES6. js, jsx
     configBabel,
@@ -139,6 +101,44 @@ export function buildConfig(target:Target,entries:Entries,argv:QuickPackOptions)
   return config;
 }
 
+function configOutput(config:WebpackConfig,options:QuickPackOptions) {
+  const {projectRoot,output} = options;
+
+  // TODO check if output path is absolute path
+  config.output = {
+    path: path.join(projectRoot,output),
+    // filename: disableHashing ? "[name].js" : "[name]-[hash].js",
+    filename: "[name].js",
+    // TODO: not sure what's a sane way to change public path...
+    publicPath:  "/build/",
+    // publicPath:  path.join("/build/"),
+  }
+}
+
+function configSourceMap(config:WebpackConfig,options:QuickPackOptions) {
+  const {sourceMap, sourceMapType, target, production} = options;
+  if(sourceMap && !production) {
+    config.devtool = sourceMapType;
+  }
+}
+
+function configStaticResources(config:WebpackConfig, options:QuickPackOptions) {
+  let loaders = [
+    {
+      test: /\.json$/,
+      loader: "json"
+    },
+
+    {
+      test: /\.(png|jpg)$/,
+      // loader: "file?name=[name].[hash].[ext]!url?limit=25000"
+      loader: "url?limit=8192"
+    },
+  ];
+
+  config.module.loaders.push(...loaders);
+}
+
 // function _buildConfig(argv:QuickPackOptions) {
 //
 //   var input = argv._.slice(1)
@@ -159,10 +159,6 @@ export function buildConfig(target:Target,entries:Entries,argv:QuickPackOptions)
 //         loader: 'import-glob',
 //       }],
 //
-//       loaders: [
-//           // { test: /\.css$/, loader: "style!css" }
-//
-//       ]
 //     },
 //
 //     plugins: removeNulls([
@@ -173,8 +169,6 @@ export function buildConfig(target:Target,entries:Entries,argv:QuickPackOptions)
 
 //   }
 //
-//   configureResolve(config,argv,mode);
-//
 //
 //   if(argv.library !== false) {
 //     // module.exports = xxx
@@ -183,11 +177,3 @@ export function buildConfig(target:Target,entries:Entries,argv:QuickPackOptions)
 //
 //   return config;
 // }
-
-
-
-function removeNulls(array) {
-  return array.filter(function(item) {
-     return Boolean(item);
-  });
-}

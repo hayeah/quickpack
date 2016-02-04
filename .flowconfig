@@ -1,0 +1,14 @@
+[ignore]
+.*node_modules/babel-.*
+.*/react/node_modules/.*
+
+[include]
+/Users/howard/p/quickpack/src/
+/Users/howard/p/quickpack/node_modules/webpack
+
+[libs]
+
+[options]
+
+suppress_type=$FlowOK
+suppress_comment= \\(.\\|\n\\)*\\$FlowOK
