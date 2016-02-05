@@ -18,6 +18,7 @@ import configResolve from "./config/resolve";
 import configProgressReport from "./config/progressReport";
 import configProduction from "./config/production";
 import configTypeScript from "./config/typescript";
+import configHotReload from "./config/hot-reload";
 
 export default buildConfig;
 
@@ -58,6 +59,12 @@ export function buildConfig(target: Target, entries: Entries, options: QuickPack
   ].forEach(fn => {
     fn(config,options);
   });
+
+  if(options.useServer && target === "web") {
+    [configHotReload].forEach(fn => {
+      fn(config,options);
+    });
+  }
 
   if(production) {
     [
