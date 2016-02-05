@@ -13,6 +13,7 @@ export type QuickPackOptions = {
   production: boolean,
 
   devServerPort: number,
+  forwardServer: string,
 
   useProduction: boolean,
   useWatch: boolean,
@@ -27,6 +28,8 @@ export function normalizeQuickPackOptions(argv: ArgV): QuickPackOptions {
     projectRoot: process.cwd(),
 
     devServerPort: argv.port || process.env.PORT || 8000,
+
+    forwardServer: argv.forward,
 
     useProduction: argv.production === true || process.env.NODE_ENV == "production",
     useServer: argv.server === true,

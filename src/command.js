@@ -6,6 +6,7 @@ export type ArgV = {
   uglify: boolean,
 
   production: boolean,
+  forward: string,
 
   _: Array<string>,
 }
@@ -78,6 +79,8 @@ var webpackOptions = {
     },
 };
 
+import build from "./build";
+
 if (command === 'build') {
   argv = yargs.reset()
     .usage('$0 build page1=./entry1 page2=./entry2 ...')
@@ -124,9 +127,9 @@ if (command === 'build') {
 
   // console.log(argv);
   // process.exit(1);
+  // const build = require("./build");
 
-  // $FlowOK
-  require("./build")(argv);
+  build(argv);
 } else if (command === 'setup') {
   argv = yargs.reset()
     .usage('$0 setup [tool]...')

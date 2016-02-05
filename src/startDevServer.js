@@ -15,7 +15,7 @@ export default function startDevServer(config: any, options: QuickPackOptions) {
 
     let compiler = webpack(config);
 
-    var serverOptions = {
+    var serverOptions: any = {
       contentBase: options.projectRoot,
       publicPath: config.output.publicPath,
       hot: true,
@@ -23,17 +23,22 @@ export default function startDevServer(config: any, options: QuickPackOptions) {
       // quiet: true,
     }
 
-    // if(argv.forward != null) {
-    //   var backendHost = argv.forward;
-    //   serverOptions.proxy = {
-    //     '/*': {
-    //       target: backendHost,
-    //       secure: false,
-    //     },
-    //   }
-    // }
+    const {forwardServer} = options;
+    if(options.forwardServer !== undefined) {
+      // TODO massage URL
+      var backendHost = forwardServer;
+      serverOptions.proxy = {
+        '/*': {
+          target: backendHost,
+          secure: false,
+        },
+      }
+    }
 
     console.log("Server starting on:", port);
+    if(forwardServer) {
+      console.log("Proxy to backend server:", forwardServer);
+    }
 
     new Server(compiler,serverOptions).listen(port,function(err) {
       if(err) {
