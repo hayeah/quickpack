@@ -29,21 +29,5 @@ export default function configBabel(config: WebpackConfig, options: QuickPackOpt
 
     plugins: [
     ],
-
-    env: {
-      development: {
-        presets: removeNulls([
-          useHotReload &&
-          // $FlowOK
-          require('babel-preset-react-hmre'),
-        ]),
-      }
-    }
   };
-}
-
-function removeNulls(array) {
-  return array.filter(function(item) {
-     return Boolean(item);
-  });
 }

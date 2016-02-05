@@ -119,15 +119,7 @@ function configStaticResources(config:WebpackConfig, options:QuickPackOptions) {
   config.module.loaders.push(...loaders);
 }
 
-// function _buildConfig(argv:QuickPackOptions) {
-//
-//   var input = argv._.slice(1)
-//
-//
 //   var disableHashing = argv.hash !== true;
-//
-//
-//
 //
 //   var config = {
 
@@ -140,12 +132,7 @@ function configStaticResources(config:WebpackConfig, options:QuickPackOptions) {
 //       }],
 //
 //     },
-//
-//     plugins: removeNulls([
-//       mode.hotReload && new webpack.HotModuleReplacementPlugin(),
-//       mode.server && new webpack.NoErrorsPlugin(),
-//     ]),
-//
+
 
 //   }
 //
