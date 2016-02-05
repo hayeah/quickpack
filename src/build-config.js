@@ -1,46 +1,11 @@
 /* @flow */
 
 var path = require("path");
-
 var webpack = require("webpack");
 
+import type {QuickPackOptions} from "./options";
+
 export type WebpackConfig = any;
-
-export type QuickPackOptions = {
-  projectRoot: string,
-  sourceMap: boolean,
-  sourceMapType: string,
-  output: string,
-  hash: boolean,
-  target: Target,
-
-  production: boolean,
-
-  useProduction: boolean,
-  useWatch: boolean,
-  useHotReload: boolean,
-  useServer: boolean,
-  useUglify: boolean,
-};
-
-// massage the CLI arguments a bit...
-export function normalizeQuickPackOptions(target:Target, argv:any): QuickPackOptions {
-  // var production = argv.production === true || process.env.NODE_ENV == "production";
-
-  let options = Object.assign({},{
-    target,
-    projectRoot: process.cwd(),
-
-    useProduction: argv.production === true || process.env.NODE_ENV == "production",
-    useHotReload: argv.server === true,
-    useWatch: argv.watch === true,
-    useUglify: argv.uglify === true,
-  },argv);
-
-  return options;
-}
-
-type Target = "web" | "node";
 
 type Entries = {
   [key:string]: string
@@ -54,8 +19,10 @@ import configProgressReport from "./config/progressReport";
 import configProduction from "./config/production";
 import configTypeScript from "./config/typescript";
 
-export function buildConfig(target:Target,entries:Entries,argv:QuickPackOptions): WebpackConfig {
-  let options = normalizeQuickPackOptions(target,argv);
+export default buildConfig;
+
+export function buildConfig(target:string, entries:Entries, argv:QuickPackOptions): WebpackConfig {
+  let options = Object.assign({},options,{target});
 
   const {projectRoot, production} = options;
 

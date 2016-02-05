@@ -1,6 +1,6 @@
 /* @flow */
 
-import type {WebpackConfig,QuickPackOptions} from "../build-config";
+import type {WebpackConfig, QuickPackOptions} from "../options";
 
 import ExtractTextPlugin from "extract-text-webpack-plugin";
 import AssetsPlugin from 'assets-webpack-plugin';

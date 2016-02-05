@@ -1,6 +1,6 @@
 /* @flow */
 
-import type {WebpackConfig, QuickPackOptions} from "../build-config";
+import type {WebpackConfig, QuickPackOptions} from "../options";
 import path from "path";
 
 export default function configExternals(config:WebpackConfig,options:QuickPackOptions): void {

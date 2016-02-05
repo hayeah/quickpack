@@ -1,5 +1,5 @@
 /* @flow */
-import type {WebpackConfig, QuickPackOptions} from "../build-config";
+import type {WebpackConfig, QuickPackOptions} from "../options";
 
 import ProgressPlugin from "webpack/lib/ProgressPlugin";
 import ProgressBar from "progress";
