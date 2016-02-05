@@ -74,6 +74,10 @@ export function buildConfig(target: Target, entries: Entries, options: QuickPack
     });
   }
 
+  // Don't output assets if there's compilation error.
+  // https://webpack.github.io/docs/list-of-plugins.html#noerrorsplugin
+  config.plugins.push(new webpack.NoErrorsPlugin());
+
   return config;
 }
 
