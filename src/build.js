@@ -2,9 +2,11 @@
 
 // TODO: check that it's a npm project. Or who cares ¯\_(ツ)_/¯
 
-import type {QuickPackOptions} from "./options";
+
 import webpack from "webpack";
 
+import type {QuickPackOptions} from "./options";
+import type {ArgV} from "./command";
 import normalizeQuickPackOptions from "./options";
 
 function report(err,stats) {
@@ -22,9 +24,7 @@ import {extractEntriesFromArguments} from "./processEntries";
 
 import startDevServer from "./startDevServer";
 
-export default function build(argv:any): void {
-  console.log(argv);
-
+export default function build(argv: ArgV): void {
   let options = normalizeQuickPackOptions(argv);
 
   let items = argv._.slice(1);
@@ -52,7 +52,7 @@ export default function build(argv:any): void {
 function startCompiler(configs:Array<any>, options: QuickPackOptions) {
   let compiler = webpack(configs);
 
-  if(options.useWatch === true) {
+  if(options.useWatch) {
     compiler.watch({ // watch options:
       aggregateTimeout: 300, // wait so long for more changes
       // poll: false // use polling instead of native watchers

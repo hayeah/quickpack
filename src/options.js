@@ -1,5 +1,7 @@
 /* @flow */
 
+import type {ArgV} from "./command";
+
 export type QuickPackOptions = {
   projectRoot: string,
   sourceMap: boolean,
@@ -19,22 +21,19 @@ export type QuickPackOptions = {
   useUglify: boolean,
 };
 
-// massage the CLI arguments a bit...
-// FIXME: The flow type is checking, but type-at-pos doesn't work
-export function normalizeQuickPackOptions(argv:any): QuickPackOptions {
-  // var production = argv.production === true || process.env.NODE_ENV == "production";
-
-  let options: QuickPackOptions = Object.assign({},{
+// Massage the CLI arguments a bit...
+export function normalizeQuickPackOptions(argv: ArgV): QuickPackOptions {
+  let options: any = Object.assign({},{
     projectRoot: process.cwd(),
 
     devServerPort: argv.port || process.env.PORT || 8000,
 
     useProduction: argv.production === true || process.env.NODE_ENV == "production",
-    useServer: argv.live === true,
-    useHotReload: argv.live === true,
-    useWatch: argv.watch === true,
+    useServer: argv.server === true,
+    useHotReload: argv.server === true,
+    useWatch: argv.watch === true || argv.server === true,
     useUglify: argv.uglify === true,
-  },argv);
+  }, argv);
 
   return options;
 }

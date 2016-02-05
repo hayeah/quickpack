@@ -1,7 +1,18 @@
+/* @flow */
+
+export type ArgV = {
+  watch: boolean,
+  server: boolean,
+  uglify: boolean,
+
+  production: boolean,
+
+  _: Array<string>,
+}
+
 var yargs = require('yargs')
   .usage('$0 command')
   .command('build', 'Builds the project.')
-  .command('server', 'Start dev server.')
   .command('setup', 'Copy baked configuration files. [experimental]')
   .version(function() {
     return require('../package').version;
@@ -23,8 +34,7 @@ var projectOptions = {
 };
 
 var webpackOptions = {
-    p: {
-      alias: 'production',
+    production: {
       describe: "Build for production environment",
       default: false,
       type: 'boolean',
@@ -37,11 +47,11 @@ var webpackOptions = {
       type: 'string',
     },
 
-   "hash": {
-      describe: "Enable long-term cache hashing",
-      default: false,
-      type: 'boolean',
-    },
+  //  "hash": {
+  //     describe: "Enable long-term cache hashing",
+  //     default: false,
+  //     type: 'boolean',
+  //   },
 
     "source-map": {
       describe: "source map (dev only)",
@@ -68,8 +78,6 @@ var webpackOptions = {
     },
 };
 
-import build from "./build";
-
 if (command === 'build') {
   argv = yargs.reset()
     .usage('$0 build page1=./entry1 page2=./entry2 ...')
@@ -81,18 +89,23 @@ if (command === 'build') {
         type: 'boolean',
       },
 
-      live: {
-        alias: "l",
-        describe: "live-reload server",
+      server: {
+        describe: "Enable server mode",
         type: 'boolean',
         default: false,
       },
 
       port: {
-        // alias: "p",
-        describe: "hot-reload server port",
+        describe: "dev-server port",
         type: 'number',
-        default: 8888,
+        default: undefined,
+      },
+
+      forward: {
+        alias: 'f',
+        describe: 'forward to backend server',
+        default: undefined,
+        type: 'string',
       }
 
     })
@@ -102,41 +115,18 @@ if (command === 'build') {
     .example("$0 build entry.js", "Build entry.js")
     .example("$0 build entry1.js entry1.js", "Build multiple entries")
     .example("$0 build page2=./entry1.js page2=./entry2.js ", "Multiple entries with output names")
-    .example("$0 build index@node", "Build for NodeJS")
-    .example("$0 build index.js --live", "Start live reload server")
-    .example("$0 build index.js --library", "Outout CommonJS module")
+    .example("$0 build server@node", "Build for NodeJS")
+    .example("$0 build client@web server@node", "Build for different targets")
+    .example("$0 build index.js --server", "Start live-reload server")
+    // .example("$0 build index.js --library", "Outout CommonJS module")
     .wrap(yargs.terminalWidth())
     .argv
 
   // console.log(argv);
   // process.exit(1);
-  build(argv);
 
-} else if (command === 'server') {
-  argv = yargs.reset()
-    .usage('$0 server')
-    .options({
-      port: {
-        describe: 'port number (default: 8000)',
-        default: undefined,
-        type: 'number',
-      },
-
-      forward: {
-        alias: 'f',
-        describe: 'forward to backend server',
-        default: undefined,
-        type: 'string',
-      }
-    })
-    .options(webpackOptions)
-    .help('h')
-    .example("PORT=4321 $0 server", "use ENV to specify port")
-    .example("$0 server -f http://localhost:7654", "forward request to backend server")
-    .alias("h","help")
-    .wrap(yargs.terminalWidth())
-    .argv
-   require("./server")(argv);
+  // $FlowOK
+  require("./build")(argv);
 } else if (command === 'setup') {
   argv = yargs.reset()
     .usage('$0 setup [tool]...')
