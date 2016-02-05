@@ -21,8 +21,10 @@ import configTypeScript from "./config/typescript";
 
 export default buildConfig;
 
-export function buildConfig(target:string, entries:Entries, argv:QuickPackOptions): WebpackConfig {
-  let options = Object.assign({},options,{target});
+type Target = "web" | "node";
+
+export function buildConfig(target: Target, entries: Entries, options: QuickPackOptions): WebpackConfig {
+  options = Object.assign({},options,{target});
 
   const {projectRoot, production} = options;
 

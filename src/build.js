@@ -1,7 +1,11 @@
 /* @flow */
 
-import type {QuickPackOptions} from "./build-config";
+// TODO: check that it's a npm project. Or who cares ¯\_(ツ)_/¯
+
+import type {QuickPackOptions} from "./options";
 import webpack from "webpack";
+
+import normalizeQuickPackOptions from "./options";
 
 function report(err,stats) {
   if(err) {
@@ -16,23 +20,39 @@ function report(err,stats) {
 import {buildConfig} from "./build-config";
 import {extractEntriesFromArguments} from "./processEntries";
 
-function build(argv:any) {
+import startDevServer from "./startDevServer";
+
+export default function build(argv:any): void {
   console.log(argv);
 
-  let options: QuickPackOptions = argv;
+  let options = normalizeQuickPackOptions(argv);
+
   let items = argv._.slice(1);
+
+  // sort arguments into different targets
   let compilations = extractEntriesFromArguments(items);
 
-  let multiconfig = Object.keys(compilations).map(target => {
+  if(options.useServer) {
+    let web = compilations.web;
+    if(web !== undefined) {
+      delete compilations.web;
+      let config = buildConfig("web", web, options);
+      startDevServer(config, options);
+    }
+  }
+
+  let configs = Object.keys(compilations).map(target => {
     let entries = compilations[target];
-    return buildConfig(target,entries,argv);
+    return buildConfig(target, entries, options);
   });
 
-  console.log(multiconfig);
+  startCompiler(configs, options);
+}
 
-  var compiler = webpack(multiconfig);
+function startCompiler(configs:Array<any>, options: QuickPackOptions) {
+  let compiler = webpack(configs);
 
-  if(options.watch == true) {
+  if(options.useWatch === true) {
     compiler.watch({ // watch options:
       aggregateTimeout: 300, // wait so long for more changes
       // poll: false // use polling instead of native watchers
@@ -42,7 +62,3 @@ function build(argv:any) {
     compiler.run(report);
   }
 }
-
-module.exports = build;
-
-// TODO: check that it's a npm project. Or who cares ¯\_(ツ)_/¯

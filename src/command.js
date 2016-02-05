@@ -68,6 +68,8 @@ var webpackOptions = {
     },
 };
 
+import build from "./build";
+
 if (command === 'build') {
   argv = yargs.reset()
     .usage('$0 build page1=./entry1 page2=./entry2 ...')
@@ -79,13 +81,19 @@ if (command === 'build') {
         type: 'boolean',
       },
 
-      t: {
-        alias: 'target',
-        describe: "Target platform",
-        default: 'web',
-        type: 'string',
+      live: {
+        alias: "l",
+        describe: "live-reload server",
+        type: 'boolean',
+        default: false,
       },
 
+      port: {
+        // alias: "p",
+        describe: "hot-reload server port",
+        type: 'number',
+        default: 8888,
+      }
 
     })
     .options(webpackOptions)
@@ -94,14 +102,15 @@ if (command === 'build') {
     .example("$0 build entry.js", "Build entry.js")
     .example("$0 build entry1.js entry1.js", "Build multiple entries")
     .example("$0 build page2=./entry1.js page2=./entry2.js ", "Multiple entries with output names")
-    .example("$0 build index.js --target=node", "Build for NodeJS")
+    .example("$0 build index@node", "Build for NodeJS")
+    .example("$0 build index.js --live", "Start live reload server")
     .example("$0 build index.js --library", "Outout CommonJS module")
     .wrap(yargs.terminalWidth())
     .argv
 
   // console.log(argv);
   // process.exit(1);
-  require("./build")(argv);
+  build(argv);
 
 } else if (command === 'server') {
   argv = yargs.reset()

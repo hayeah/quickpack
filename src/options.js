@@ -10,6 +10,8 @@ export type QuickPackOptions = {
 
   production: boolean,
 
+  devServerPort: number,
+
   useProduction: boolean,
   useWatch: boolean,
   useHotReload: boolean,
@@ -24,6 +26,8 @@ export function normalizeQuickPackOptions(argv:any): QuickPackOptions {
 
   let options: QuickPackOptions = Object.assign({},{
     projectRoot: process.cwd(),
+
+    devServerPort: argv.port || process.env.PORT || 8000,
 
     useProduction: argv.production === true || process.env.NODE_ENV == "production",
     useServer: argv.live === true,

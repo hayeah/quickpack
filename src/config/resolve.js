@@ -31,7 +31,7 @@ export default function configResolve(config:WebpackConfig,options:QuickPackOpti
   let resolveLoader = {
     "modulesDirectories": [
       // path.join(process.cwd(), 'node_modules'),
-      path.join(__dirname, "..", 'node_modules')
+      path.join(__dirname, "..", "..", 'node_modules')
     ],
   };
 
