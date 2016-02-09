@@ -9,6 +9,8 @@ import type {QuickPackOptions} from "./options";
 import type {ArgV} from "./command";
 import normalizeQuickPackOptions from "./options";
 
+import detectPort from "detect-port";
+
 function report(err,stats) {
   if(err) {
     console.error(err.stack || err);
@@ -36,8 +38,18 @@ export default function build(argv: ArgV): void {
     let web = compilations.web;
     if(web !== undefined) {
       delete compilations.web;
-      let config = buildConfig("web", web, options);
-      startDevServer(config, options);
+      detectPort(options.devServerPort,(err,port) => {
+        if(err) {
+          console.log(err);
+          process.exit(1);
+        }
+
+        options.devServerPort = port;
+
+        let config = buildConfig("web", web, options);
+        startDevServer(config, options);
+      });
+
     }
   }
 
