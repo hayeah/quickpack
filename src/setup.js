@@ -21,7 +21,7 @@ function linkConfig(argv) {
 function setupTypeScript(argv) {
   var projectRoot = argv.projectRoot;
 
-  var configDir = path.join(__dirname,"configFiles","typescript");
+  var configDir = path.join(__dirname,"..","configFiles","typescript");
 
   // The ask option is crappy and horrible. Don't use.
   var conflictResolve = argv.force === true ? "overwrite" : "skip";
