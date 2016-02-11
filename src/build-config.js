@@ -22,10 +22,18 @@ import configHotReload from "./config/hot-reload";
 
 export default buildConfig;
 
-type Target = "web" | "node";
+type Target = "web" | "node" | "library";
 
 export function buildConfig(target: Target, entries: Entries, options: QuickPackOptions): WebpackConfig {
-  options = Object.assign({},options,{target});
+  let isLibrary = false;
+  if(target === "library") {
+    target = "web";
+    isLibrary = true;
+  }
+  options = Object.assign({},options,{
+    target,
+    isLibrary,
+  });
 
   const {projectRoot, production} = options;
 
@@ -92,6 +100,10 @@ function configOutput(config:WebpackConfig,options:QuickPackOptions) {
     // TODO: not sure what's a sane way to change public path...
     publicPath:  "/build/",
     // publicPath:  path.join("/build/"),
+  }
+
+  if(options.isLibrary) {
+    config.output.libraryTarget = "commonjs2";
   }
 }
 

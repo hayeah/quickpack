@@ -15,6 +15,8 @@ export type QuickPackOptions = {
   devServerPort: number,
   forwardServer: string,
 
+  isLibrary: boolean,
+
   useProduction: boolean,
   useWatch: boolean,
   useHotReload: boolean,
