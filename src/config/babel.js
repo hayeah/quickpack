@@ -9,8 +9,10 @@ export default function configBabel(config: WebpackConfig, options: QuickPackOpt
 
   let [babelLoader,...babelPresets] = loadModulesWithProgress([
     "babel-loader", // preload babel-loader
-    'babel-preset-es2015',
-    "babel-preset-stage-1",
+    // holy crap! flatten and dedup the presets is sooooooo fast!
+    'babel-flatten-presets/es2015-stage1',
+    // "babel-preset-es2015",
+    // "babel-preset-stage-1",
     'babel-preset-react'
   ]);
 
