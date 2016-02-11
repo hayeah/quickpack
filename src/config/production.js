@@ -8,6 +8,9 @@ import type {WebpackConfig, QuickPackOptions} from "../options";
 export default function configProduction(config:WebpackConfig,options:QuickPackOptions): void {
   config.plugins.push(new webpack.optimize.OccurenceOrderPlugin());
 
+  config.plugins.push(new webpack.optimize.DedupePlugin());
+
+
   if(options.useUglify) {
     config.plugins.push(new UglifyJsPlugin());
   }
