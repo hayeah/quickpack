@@ -66,7 +66,7 @@ export function buildConfig(target: Target, entries: Entries, options: QuickPack
     });
   }
 
-  if(production) {
+  if(options.useProduction) {
     [
       configProduction
     ].forEach(fn => {
