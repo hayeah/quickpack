@@ -22,7 +22,6 @@
     "babel-preset-react": "^6.3.13",
     "babel-preset-react-hmre": "^1.0.1",
     "babel-runtime": "^6.5.0",
-    "chai": "^3.5.0",
     "css-loader": "^0.23.1",
     "detect-port": "^0.1.4",
     "extract-text-webpack-plugin": "^1.0.1",
@@ -33,13 +32,11 @@
     "less": "^2.6.0",
     "less-loader": "^2.2.2",
     "merge-dirs": "^0.2.1",
-    "mocha": "^2.4.5",
     "node-sass": "^3.4.2",
     "postcss-loader": "^0.8.0",
     "progress": "^1.1.8",
     "quickpack-presets": "0.0.1",
     "react": "^0.14.6",
-    "react-transform-hmr": "^1.0.1",
     "sass-loader": "^3.1.2",
     "style-loader": "^0.13.0",
     "supports-color": "^3.1.2",
@@ -48,7 +45,6 @@
     "url-loader": "^0.5.7",
     "webpack": "^1.12.11",
     "webpack-dev-server": "^1.14.1",
-    "webpack-hot-middleware": "^2.6.0",
     "yargs": "^3.32.0"
   }
 }
