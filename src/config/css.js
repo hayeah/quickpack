@@ -10,21 +10,10 @@ import autoprefixer from 'autoprefixer';
 export default function configCSS(config: WebpackConfig, options: QuickPackOptions) {
   const {useProduction} = options;
 
-  let cssLoader = "style-loader!css-loader!postcss-loader";
-  let scssLoader = "style-loader!css-loader!sass-loader";
-  let lessLoader = "style-loader!css-loader!less-loader";
+  const cssLoader = ExtractTextPlugin.extract("style-loader", "css-loader!postcss-loader");
+  const scssLoader = ExtractTextPlugin.extract("style-loader", "css-loader!sass-loader");
+  const lessLoader = ExtractTextPlugin.extract("style-loader", "css-loader!less-loader");
 
-  if(useProduction) {
-    cssLoader = ExtractTextPlugin.extract("style-loader", "css-loader!postcss-loader");
-  }
-
-  if(useProduction) {
-    scssLoader = ExtractTextPlugin.extract("style-loader", "style-loader!css-loader!sass-loader");
-  }
-
-  if(useProduction) {
-    lessLoader = ExtractTextPlugin.extract("style-loader", "style-loader!css-loader!less-loader");
-  }
 
   let loaders = [
     {
@@ -47,10 +36,8 @@ export default function configCSS(config: WebpackConfig, options: QuickPackOptio
 
   config.postcss = [autoprefixer];
 
-  if(useProduction) {
-    // var extractCSS = new ExtractTextPlugin(disableHashing ? "app.css" : "app-[contenthash].css");
-    config.plugins.push(new ExtractTextPlugin("[name].css"));
-  }
+  // var extractCSS = new ExtractTextPlugin(disableHashing ? "app.css" : "app-[contenthash].css");
+  config.plugins.push(new ExtractTextPlugin("[name].css"));
 
     // https://github.com/sporto/assets-webpack-plugin
   // if(!disableHashing) {
