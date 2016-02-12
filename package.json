@@ -19,6 +19,7 @@
     "babel-core": "^6.4.0",
     "babel-fast-presets": "0.0.2",
     "babel-loader": "^6.2.1",
+    "babel-plugin-transform-inline-environment-variables": "^6.5.0",
     "babel-preset-react": "^6.3.13",
     "babel-preset-react-hmre": "^1.0.1",
     "babel-runtime": "^6.5.0",

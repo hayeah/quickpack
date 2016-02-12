@@ -31,12 +31,17 @@ export default function configBabel(config: WebpackConfig, options: QuickPackOpt
     }
   ];
 
+  const plugins = [];
+
+  if(options.target === "web") {
+    // $FlowOK
+    plugins.push(require("babel-plugin-transform-inline-environment-variables"));
+  }
+
   config.module.loaders.push(...loaders);
 
   config.babel = {
     presets: babelPresets,
-
-    plugins: [
-    ],
+    plugins,
   };
 }
