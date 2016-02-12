@@ -29,6 +29,15 @@ export type QuickPackOptions = {
 // Massage the CLI arguments a bit...
 export function normalizeQuickPackOptions(argv: ArgV): QuickPackOptions {
   const useProduction = argv.production === true || process.env.NODE_ENV == "production";
+
+  if(process.env.NODE_ENV === undefined) {
+    if(useProduction) {
+      process.env.NODE_ENV = "production";
+    } else {
+      process.env.NODE_ENV = "development";
+    }
+  }
+
   let useES6;
 
   if(argv.es6 === undefined) {
