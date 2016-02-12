@@ -7,16 +7,23 @@ import loadModulesWithProgress from "../loadModulesWithProgress";
 export default function configBabel(config: WebpackConfig, options: QuickPackOptions): void {
   const {useHotReload} = options;
 
-  let [babelLoader,...babelPresets] = loadModulesWithProgress([
-    "babel-loader", // preload babel-loader
-    // holy crap! flatten and dedup the presets is sooooooo fast!
-    'babel-flatten-presets/es2015-stage1',
-    // "babel-preset-es2015",
-    // "babel-preset-stage-1",
-    'babel-preset-react'
-  ]);
+  const presets = ['babel-preset-react'];
 
-  let loaders = [
+  if(options.useES6) {
+    presets.push("quickpack-presets/modern");
+  } else {
+    // deduped es2015 + stage-1. much faster loading. see: https://github.com/hayeah/babel-fast-presets
+    presets.push("babel-flatten-presets/es2015-stage1");
+  }
+
+  console.log("presets", presets);
+
+  // load dependencies with progress reprot
+  const [babelLoader,...babelPresets] = loadModulesWithProgress([
+    "babel-loader",
+  ].concat(presets));
+
+  const loaders = [
     {
       test: /\.jsx?$/,
       exclude: /(node_modules|bower_components)/,

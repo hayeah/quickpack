@@ -17,6 +17,8 @@ export type QuickPackOptions = {
 
   isLibrary: boolean,
 
+  useES6: boolean,
+
   useProduction: boolean,
   useWatch: boolean,
   useHotReload: boolean,
@@ -26,6 +28,17 @@ export type QuickPackOptions = {
 
 // Massage the CLI arguments a bit...
 export function normalizeQuickPackOptions(argv: ArgV): QuickPackOptions {
+  const useProduction = argv.production === true || process.env.NODE_ENV == "production";
+  let useES6;
+
+  if(argv.es6 === undefined) {
+    // default to es6 output for development;
+    useES6 = !useProduction;
+  } else {
+    // coerce to boolean
+    useES6 = !!argv.es6;
+  }
+
   let options: any = Object.assign({},{
     projectRoot: process.cwd(),
 
@@ -33,7 +46,9 @@ export function normalizeQuickPackOptions(argv: ArgV): QuickPackOptions {
 
     forwardServer: argv.forward,
 
-    useProduction: argv.production === true || process.env.NODE_ENV == "production",
+    useES6,
+
+    useProduction,
     useServer: argv.server === true,
     useHotReload: argv.server === true,
     useWatch: argv.watch === true || argv.server === true,

@@ -6,13 +6,13 @@ import path from "path";
 export default function configResolve(config:WebpackConfig,options:QuickPackOptions) {
   const {projectRoot} = options;
 
-  let resolve = {
+  const resolve = {
     root: projectRoot,
     modulesDirectories: [
       path.join(projectRoot, 'node_modules'),
       "web_modules",
       "node_modules",
-      path.join(__dirname, 'node_modules'),
+      path.join(__dirname, '..', 'node_modules'),
     ],
 
     // Add `.ts` and `.tsx` as a resolvable extension.
@@ -28,7 +28,7 @@ export default function configResolve(config:WebpackConfig,options:QuickPackOpti
 
   config.resolve = resolve;
 
-  let resolveLoader = {
+  const resolveLoader = {
     "modulesDirectories": [
       // path.join(process.cwd(), 'node_modules'),
       path.join(__dirname, "..", "..", 'node_modules')
