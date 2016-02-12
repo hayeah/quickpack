@@ -103,14 +103,22 @@ function configOutput(config:WebpackConfig,options:QuickPackOptions) {
   }
 
   if(options.isLibrary) {
+    // $FlowOK
     config.output.libraryTarget = "commonjs2";
   }
 }
 
 function configSourceMap(config:WebpackConfig,options:QuickPackOptions) {
-  const {sourceMap, sourceMapType, target, production} = options;
+  const {sourceMap, sourceMapType, target, production, sourceMapCheap} = options;
   if(sourceMap && !production) {
-    config.devtool = sourceMapType;
+    let devtool = sourceMapCheap ? "cheap-module-eval-source-map" : "source-map";
+
+    // allow option to override
+    if(sourceMapType) {
+      devtool = sourceMapType;
+    }
+
+    config.devtool = devtool;
   }
 }
 

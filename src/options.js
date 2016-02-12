@@ -5,6 +5,7 @@ import type {ArgV} from "./command";
 export type QuickPackOptions = {
   projectRoot: string,
   sourceMap: boolean,
+  sourceMapCheap: boolean,
   sourceMapType: string,
   output: string,
   hash: boolean,

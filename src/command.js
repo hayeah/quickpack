@@ -9,6 +9,9 @@ export type ArgV = {
   forward: string,
   es6: boolean,
 
+  sourceMap: boolean,
+  sourceMapCheap: boolean,
+
   _: Array<string>,
 }
 
@@ -61,9 +64,15 @@ var webpackOptions = {
       type: 'boolean',
     },
 
+    "source-map-cheap": {
+      describe: "uses cheap-module-eval-source-map",
+      default: false,
+      type: 'boolean'
+    },
+
     "source-map-type": {
       describe: "source map type",
-      default: "cheap-module-eval-source-map",
+      default: undefined,
       type: 'string',
     },
 
