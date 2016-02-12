@@ -2,10 +2,15 @@
 
 import type {WebpackConfig, QuickPackOptions} from "../options";
 import path from "path";
+import fs from "fs";
 
 export default function configExternals(config:WebpackConfig,options:QuickPackOptions): void {
   const {projectRoot,target} = options;
   let packageJSONPath = path.join(projectRoot,"package.json");
+
+  if(!fs.existsSync(packageJSONPath)) {
+    return;
+  }
   // $FlowOK
   let packageJSON = require(packageJSONPath);
 
