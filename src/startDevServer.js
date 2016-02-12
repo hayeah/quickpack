@@ -7,11 +7,11 @@ import detectPort from "detect-port";
 import type {QuickPackOptions} from "./options";
 
 export default function startDevServer(config: any, options: QuickPackOptions) {
-  let port = options.devServerPort;
+  const port = options.devServerPort;
 
-  let compiler = webpack(config);
+  const compiler = webpack(config);
 
-  var serverOptions: any = {
+  const serverOptions: any = {
     contentBase: options.projectRoot,
     publicPath: config.output.publicPath,
     // hot: true,
@@ -20,9 +20,26 @@ export default function startDevServer(config: any, options: QuickPackOptions) {
   }
 
   const {forwardServer} = options;
-  if(options.forwardServer !== undefined) {
+  if(forwardServer !== undefined) {
+    let backendHost;
+
+    // Try parsing as port
+    try {
+      const port = JSON.parse(forwardServer);
+      backendHost = `http://127.0.0.1:${port}`;
+    } catch(err) {
+      // console.log(err);
+    }
+
+    if(backendHost === undefined) {
+      backendHost = forwardServer;
+    }
+
+    if(!backendHost.match(/^https?:\/\//i)) {
+      backendHost += "http://"
+    }
+
     // TODO massage URL
-    var backendHost = forwardServer;
     serverOptions.proxy = {
       '/*': {
         target: backendHost,
