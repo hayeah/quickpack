@@ -18,7 +18,12 @@ function report(err,stats) {
     return;
   }
 
-  process.stdout.write(stats.toString("normal"));
+  // process.stdout.write(stats.toString("normal"));
+
+  // const json = stats.toJson();
+  // console.log(JSON.stringify(json.chunks, null, 2));
+  // console.log(JSON.stringify(json.assetsByChunkName, null, 2));
+  // console.log(JSON.stringify(json.assets, null, 2));
 }
 
 import {buildConfig} from "./build-config";

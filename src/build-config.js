@@ -1,7 +1,7 @@
 /* @flow */
 
-var path = require("path");
-var webpack = require("webpack");
+import path from "path";
+import webpack from "webpack";
 
 import type {QuickPackOptions} from "./options";
 
@@ -11,6 +11,7 @@ type Entries = {
   [key:string]: string
 };
 
+import configOutput from "./config/output";
 import configCSS from "./config/css";
 import configBabel from "./config/babel";
 import configExternals from "./config/externals";
@@ -20,12 +21,20 @@ import configProduction from "./config/production";
 import configTypeScript from "./config/typescript";
 import configHotReload from "./config/hot-reload";
 import configSourceMap from "./config/source-map";
+import configNode from "./config/node";
+import configStaticResources from "./config/static-resources";
 
 export default buildConfig;
 
 type Target = "web" | "node" | "library";
 
 export function buildConfig(target: Target, entries: Entries, options: QuickPackOptions): WebpackConfig {
+  function applyConfigFunctions(...configFunctions) {
+    configFunctions.forEach(fn => {
+      fn(config,options);
+    });
+  }
+
   let isLibrary = false;
   if(target === "library") {
     target = "web";
@@ -38,7 +47,7 @@ export function buildConfig(target: Target, entries: Entries, options: QuickPack
 
   const {projectRoot, production} = options;
 
-  let config: WebpackConfig = {
+  const config: WebpackConfig = {
     context: projectRoot,
     target: target,
     entry: entries,
@@ -50,7 +59,8 @@ export function buildConfig(target: Target, entries: Entries, options: QuickPack
     plugins: [],
   };
 
-  [
+  applyConfigFunctions(
+    configOutput,
     configResolve,
     configOutput,
     configSourceMap,
@@ -65,22 +75,18 @@ export function buildConfig(target: Target, entries: Entries, options: QuickPack
     configStaticResources,
     configExternals,
     configProgressReport,
-  ].forEach(fn => {
-    fn(config,options);
-  });
+  );
 
   if(options.useServer && target === "web") {
-    [configHotReload].forEach(fn => {
-      fn(config,options);
-    });
+    applyConfigFunctions(configHotReload);
   }
 
   if(options.useProduction) {
-    [
-      configProduction
-    ].forEach(fn => {
-      fn(config,options);
-    });
+    applyConfigFunctions(configProduction);
+  }
+
+  if(options.target !== "node") {
+    applyConfigFunctions(configNode);
   }
 
   // Don't output assets if there's compilation error.
@@ -90,43 +96,10 @@ export function buildConfig(target: Target, entries: Entries, options: QuickPack
   return config;
 }
 
-function configOutput(config:WebpackConfig,options:QuickPackOptions) {
-  const {projectRoot,output} = options;
-
-  // TODO check if output path is absolute path
-  config.output = {
-    path: path.join(projectRoot,output),
-    // filename: disableHashing ? "[name].js" : "[name]-[hash].js",
-    filename: "[name].js",
-    // TODO: not sure what's a sane way to change public path...
-    publicPath:  "/build/",
-    // publicPath:  path.join("/build/"),
-  }
-
-  if(options.isLibrary) {
-    // $FlowOK
-    config.output.libraryTarget = "commonjs2";
-  }
-}
 
 
 
-function configStaticResources(config:WebpackConfig, options:QuickPackOptions) {
-  let loaders = [
-    {
-      test: /\.json$/,
-      loader: "json"
-    },
 
-    {
-      test: /\.(png|jpg)$/,
-      // loader: "file?name=[name].[hash].[ext]!url?limit=25000"
-      loader: "url?limit=8192"
-    },
-  ];
-
-  config.module.loaders.push(...loaders);
-}
 
 //   var disableHashing = argv.hash !== true;
 //
