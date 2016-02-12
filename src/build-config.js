@@ -19,6 +19,7 @@ import configProgressReport from "./config/progressReport";
 import configProduction from "./config/production";
 import configTypeScript from "./config/typescript";
 import configHotReload from "./config/hot-reload";
+import configSourceMap from "./config/source-map";
 
 export default buildConfig;
 
@@ -108,19 +109,7 @@ function configOutput(config:WebpackConfig,options:QuickPackOptions) {
   }
 }
 
-function configSourceMap(config:WebpackConfig,options:QuickPackOptions) {
-  const {sourceMap, sourceMapType, target, production, sourceMapCheap} = options;
-  if(sourceMap && !production) {
-    let devtool = sourceMapCheap ? "cheap-module-eval-source-map" : "source-map";
 
-    // allow option to override
-    if(sourceMapType) {
-      devtool = sourceMapType;
-    }
-
-    config.devtool = devtool;
-  }
-}
 
 function configStaticResources(config:WebpackConfig, options:QuickPackOptions) {
   let loaders = [
