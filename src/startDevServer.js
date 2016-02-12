@@ -14,7 +14,7 @@ export default function startDevServer(config: any, options: QuickPackOptions) {
   var serverOptions: any = {
     contentBase: options.projectRoot,
     publicPath: config.output.publicPath,
-    hot: true,
+    // hot: true,
     stats: "normal",
     // quiet: true,
   }
