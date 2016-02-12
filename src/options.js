@@ -1,6 +1,6 @@
 /* @flow */
 
-import type {ArgV} from "./command";
+import type {ArgV} from "./cli";
 
 export type QuickPackOptions = {
   projectRoot: string,

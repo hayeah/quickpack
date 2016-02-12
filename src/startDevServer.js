@@ -43,19 +43,3 @@ export default function startDevServer(config: any, options: QuickPackOptions) {
     }
   });
 }
-
-  //
-  // // Add the auto-refresh client code to the front of each entry.
-  // // The query url at the end is used to determine the address of the webpack server.
-  // // var devClient = [require.resolve("../client/") + "?" + protocol + "://" + options.host + ":" + options.port];
-  // var devClient = [require.resolve("webpack-dev-server/client/") + "?" + "http" + "://" + "127.0.0.1" + ":" + port];
-  //
-  // // if(argv.hot) {
-  // // }
-  // devClient.push(require.resolve("webpack/hot/dev-server"));
-  //
-  // var entries = {};
-  // Object.keys(config.entry).forEach(function(name) {
-  //   entries[name] = devClient.concat([config.entry[name]]);
-  // });
-  //

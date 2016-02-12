@@ -6,7 +6,7 @@
 import webpack from "webpack";
 
 import type {QuickPackOptions} from "./options";
-import type {ArgV} from "./command";
+import type {ArgV} from "./cli";
 import normalizeQuickPackOptions from "./options";
 
 import detectPort from "detect-port";
