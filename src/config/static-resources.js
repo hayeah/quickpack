@@ -9,7 +9,7 @@ export default function config(config:WebpackConfig, options:QuickPackOptions) {
     },
 
     {
-      test: /\.(png|jpg)$/,
+      test: /\.(png|jpg|svg|gif)$/,
       // loader: "file?name=[name].[hash].[ext]!url?limit=25000"
       loader: "url?limit=8192"
     },
