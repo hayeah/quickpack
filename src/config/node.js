@@ -4,10 +4,6 @@ import path from "path";
 import type {WebpackConfig, QuickPackOptions} from "../options";
 
 export default function config(config: WebpackConfig, options: QuickPackOptions): void {
-  if(options.target !== "node") {
-    return;
-  }
-
   // Webpack defines these constants as paths relative to context.
   config.node = {
     __filename: true,

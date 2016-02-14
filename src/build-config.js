@@ -85,7 +85,7 @@ export function buildConfig(target: Target, entries: Entries, options: QuickPack
     applyConfigFunctions(configProduction);
   }
 
-  if(options.target !== "node") {
+  if(options.target === "node") {
     applyConfigFunctions(configNode);
   }
 

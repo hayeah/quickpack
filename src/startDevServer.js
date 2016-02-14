@@ -40,6 +40,7 @@ export default function startDevServer(config: any, options: QuickPackOptions) {
     }
 
     // TODO massage URL
+    console.log("Proxy to backend:", backendHost);
     serverOptions.proxy = {
       '/*': {
         target: backendHost,
@@ -49,10 +50,7 @@ export default function startDevServer(config: any, options: QuickPackOptions) {
   }
 
   console.log("Server starting on:", port);
-  if(forwardServer) {
-    console.log("Proxy to backend server:", forwardServer);
-  }
-
+  
   new Server(compiler,serverOptions).listen(port,function(err) {
     if(err) {
       console.error(err);

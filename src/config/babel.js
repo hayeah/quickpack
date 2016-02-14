@@ -16,8 +16,6 @@ export default function configBabel(config: WebpackConfig, options: QuickPackOpt
     presets.push("babel-flatten-presets/es2015-stage1");
   }
 
-  console.log("presets", presets);
-
   // load dependencies with progress reprot
   const [babelLoader,...babelPresets] = loadModulesWithProgress([
     "babel-loader",

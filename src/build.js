@@ -18,7 +18,7 @@ function report(err,stats) {
     return;
   }
 
-  // process.stdout.write(stats.toString("normal"));
+  process.stdout.write(stats.toString("normal"));
 
   // const json = stats.toJson();
   // console.log(JSON.stringify(json.chunks, null, 2));
