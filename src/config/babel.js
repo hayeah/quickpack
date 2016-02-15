@@ -13,7 +13,7 @@ export default function configBabel(config: WebpackConfig, options: QuickPackOpt
     presets.push("quickpack-presets/modern");
   } else {
     // deduped es2015 + stage-1. much faster loading. see: https://github.com/hayeah/babel-fast-presets
-    presets.push("babel-flatten-presets/es2015-stage1");
+    presets.push("babel-fast-presets/es2015-stage1");
   }
 
   // load dependencies with progress reprot
