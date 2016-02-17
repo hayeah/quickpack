@@ -12,6 +12,8 @@ export type ArgV = {
   sourceMap: boolean,
   sourceMapCheap: boolean,
 
+  polyfill: boolean,
+
   _: Array<string>,
 }
 
@@ -78,6 +80,12 @@ var webpackOptions = {
 
     "es6": {
       describe: "Output ES6 for modern JS engines",
+      type: 'boolean',
+      default: undefined,
+    },
+
+    "polyfill": {
+      describe: "Use ES6 babel-polyfill for max compatibility",
       type: 'boolean',
       default: undefined,
     },

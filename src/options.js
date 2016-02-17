@@ -20,6 +20,7 @@ export type QuickPackOptions = {
 
   useES6: boolean,
 
+  usePolyfill: boolean,
   useProduction: boolean,
   useWatch: boolean,
   useHotReload: boolean,
@@ -39,15 +40,17 @@ export function normalizeQuickPackOptions(argv: ArgV): QuickPackOptions {
     }
   }
 
-  let useES6;
-
-  if(argv.es6 === undefined) {
-    // default to es6 output for development;
-    useES6 = !useProduction;
-  } else {
-    // coerce to boolean
-    useES6 = !!argv.es6;
+  let usePolyfill = argv.polyfill;
+  if(usePolyfill === undefined) {
+    usePolyfill = useProduction;
   }
+
+  let useES6 = argv.es6;
+  if(useES6 === undefined) {
+    // default to es6 output for development;
+    useES6 = !usePolyfill && !useProduction;
+  }
+
 
   let options: any = Object.assign({},{
     projectRoot: process.cwd(),
@@ -57,6 +60,7 @@ export function normalizeQuickPackOptions(argv: ArgV): QuickPackOptions {
     forwardServer: argv.forward,
 
     useES6,
+    usePolyfill,
 
     useProduction,
     useServer: argv.server === true,

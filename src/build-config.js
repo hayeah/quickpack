@@ -23,6 +23,7 @@ import configHotReload from "./config/hot-reload";
 import configSourceMap from "./config/source-map";
 import configNode from "./config/node";
 import configStaticResources from "./config/static-resources";
+import configPolyfill from "./config/polyfill";
 
 export default buildConfig;
 
@@ -67,6 +68,8 @@ export function buildConfig(target: Target, entries: Entries, options: QuickPack
 
     // ES6. js, jsx
     configBabel,
+    configPolyfill,
+
     // TypeScript. ts, tsx
     configTypeScript,
 
