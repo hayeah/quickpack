@@ -20,7 +20,8 @@ export default function configExternals(config:WebpackConfig,options:QuickPackOp
 
   // If target is node, don't pack node_modules stuff into the bundle.
   if(target === "node") {
-    Object.assign(externals,packageJSON.dependencies)
+    Object.assign(externals, packageJSON.dependencies || {});
+    Object.assign(externals, packageJSON.devDependencies || {});
   }
 
   var dependencies = {};
