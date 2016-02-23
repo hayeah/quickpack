@@ -14,6 +14,8 @@ export type ArgV = {
 
   polyfill: boolean,
 
+  target?: string,
+
   _: Array<string>,
 }
 
@@ -100,6 +102,12 @@ var webpackOptions = {
       describe: "source map (production only)",
       default: true,
       type: 'boolean',
+    },
+
+    "target": {
+      describe: "Default compilation target (default 'web')",
+      default: undefined,
+      type: 'string',
     },
 };
 

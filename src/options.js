@@ -16,6 +16,8 @@ export type QuickPackOptions = {
   devServerPort: number,
   forwardServer: string,
 
+  defaultTarget: string,
+
   isLibrary: boolean,
 
   useES6: boolean,
@@ -58,6 +60,8 @@ export function normalizeQuickPackOptions(argv: ArgV): QuickPackOptions {
     devServerPort: argv.port || process.env.PORT || 8000,
 
     forwardServer: argv.forward,
+
+    defaultTarget: argv.target || "web",
 
     useES6,
     usePolyfill,

@@ -11,9 +11,8 @@ type Entries = { [entry: string]: string };
 
 type CompilationTargets = { [target: string]: Entries };
 
-export function extractEntry(input: string): ParsedEntry {
+export function extractEntry(input: string, defaultTarget: string): ParsedEntry {
   // entry=page@node
-  const defaultTarget = "web";
   let filename: string, entry: string, target: string;
 
   if (input.indexOf("@") !== -1) {
@@ -45,14 +44,14 @@ export function extractEntry(input: string): ParsedEntry {
 }
 
 // extractEntriesFromArguments("a a=b foo=bar@node c@web")
-export function extractEntriesFromArguments(items: Array<string>): CompilationTargets {
+export function extractEntriesFromArguments(items: Array<string>, defaultTarget: string): CompilationTargets {
   // collect different platforms together.
 
   // map of compilation targets
   const compilations: CompilationTargets = {};
 
   items.forEach(arg => {
-    const { filename, entry, target } = extractEntry(arg);
+    const { filename, entry, target } = extractEntry(arg, defaultTarget);
 
     if(compilations[target] === undefined) {
       compilations[target] = {};

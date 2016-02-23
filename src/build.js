@@ -38,7 +38,7 @@ export default function build(argv: ArgV): void {
   const items = argv._.slice(1);
 
   // sort arguments into different targets
-  const compilations = extractEntriesFromArguments(items);
+  const compilations = extractEntriesFromArguments(items, options.defaultTarget);
 
   if(options.useServer) {
     const web = compilations.web;
