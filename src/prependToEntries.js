@@ -8,7 +8,6 @@ type Entries = {
 
 // Prepend a module to the beginning of a list of modules.
 export default function prependToEntries(entries: Entries, module: string): Entries {
-  console.log(entries, module);
   let newEntries: Entries = {};
 
   Object.keys(entries).forEach(name => {
