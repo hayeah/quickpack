@@ -1,18 +1,28 @@
+/* @flow */
 import path from "path";
 
-export function extractEntry(input) {
+type ParsedEntry = {
+  entry: string,
+  filename: string,
+  target: string,
+};
+
+type Entries = { [entry: string]: string };
+
+type CompilationTargets = { [target: string]: Entries };
+
+export function extractEntry(input: string): ParsedEntry {
   // entry=page@node
-  let filename, entry, target;
+  const defaultTarget = "web";
+  let filename: string, entry: string, target: string;
 
   if (input.indexOf("@") !== -1) {
     let parts = input.split("@");
 
     input = parts[0];
     target = parts[1];
-  }
-
-  if (target == undefined) {
-    target = "web";
+  } else {
+    target = defaultTarget;
   }
 
   if (input.indexOf("=") !== -1) {
@@ -34,16 +44,14 @@ export function extractEntry(input) {
   return { filename, entry, target };
 }
 
-// a a=b foo=bar@node c@web
-export function extractEntriesFromArguments(argv) {
+// extractEntriesFromArguments("a a=b foo=bar@node c@web")
+export function extractEntriesFromArguments(items: Array<string>): CompilationTargets {
   // collect different platforms together.
 
   // map of compilation targets
-  let compilations = {
-    // [target]: {[entry]: [filename]}
-  };
+  const compilations: CompilationTargets = {};
 
-  argv.forEach(arg => {
+  items.forEach(arg => {
     const { filename, entry, target } = extractEntry(arg);
 
     if(compilations[target] === undefined) {

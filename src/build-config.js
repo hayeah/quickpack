@@ -27,7 +27,7 @@ import configPolyfill from "./config/polyfill";
 
 export default buildConfig;
 
-type Target = "web" | "node" | "library";
+export type Target = "web" | "node" | "library";
 
 export function buildConfig(target: Target, entries: Entries, options: QuickPackOptions): WebpackConfig {
   function applyConfigFunctions(...configFunctions) {

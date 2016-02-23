@@ -26,21 +26,22 @@ function report(err,stats) {
   // console.log(JSON.stringify(json.assets, null, 2));
 }
 
+import type { Target } from "./build-config";
 import {buildConfig} from "./build-config";
 import {extractEntriesFromArguments} from "./processEntries";
 
 import startDevServer from "./startDevServer";
 
 export default function build(argv: ArgV): void {
-  let options = normalizeQuickPackOptions(argv);
+  const options = normalizeQuickPackOptions(argv);
 
-  let items = argv._.slice(1);
+  const items = argv._.slice(1);
 
   // sort arguments into different targets
-  let compilations = extractEntriesFromArguments(items);
+  const compilations = extractEntriesFromArguments(items);
 
   if(options.useServer) {
-    let web = compilations.web;
+    const web = compilations.web;
     if(web !== undefined) {
       delete compilations.web;
       detectPort(options.devServerPort,(err,port) => {
@@ -51,23 +52,25 @@ export default function build(argv: ArgV): void {
 
         options.devServerPort = port;
 
-        let config = buildConfig("web", web, options);
+        const config = buildConfig("web", web, options);
         startDevServer(config, options);
       });
 
     }
   }
 
-  let configs = Object.keys(compilations).map(target => {
-    let entries = compilations[target];
-    return buildConfig(target, entries, options);
+  const configs = Object.keys(compilations).map(target => {
+    const entries = compilations[target];
+    // $FlowOK
+    const t: Target = target;
+    return buildConfig(t, entries, options);
   });
 
   startCompiler(configs, options);
 }
 
 function startCompiler(configs:Array<any>, options: QuickPackOptions) {
-  let compiler = webpack(configs);
+  const compiler = webpack(configs);
 
   if(options.useWatch) {
     compiler.watch({ // watch options:
