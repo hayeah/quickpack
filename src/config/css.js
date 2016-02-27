@@ -10,10 +10,9 @@ import autoprefixer from 'autoprefixer';
 export default function configCSS(config: WebpackConfig, options: QuickPackOptions) {
   const {useProduction} = options;
 
-  const cssLoader = ExtractTextPlugin.extract("style-loader", "css-loader!postcss-loader");
-  const scssLoader = ExtractTextPlugin.extract("style-loader", "css-loader!sass-loader");
-  const lessLoader = ExtractTextPlugin.extract("style-loader", "css-loader!less-loader");
-
+  const cssLoader = ExtractTextPlugin.extract("style-loader", "css-loader?sourceMap!postcss-loader?sourceMap");
+  const scssLoader = ExtractTextPlugin.extract("style-loader", "css-loader?sourceMap!sass-loader?sourceMap");
+  const lessLoader = ExtractTextPlugin.extract("style-loader", "css-loader?sourceMap!less-loader?sourceMap");
 
   let loaders = [
     {
