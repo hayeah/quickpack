@@ -1,6 +1,7 @@
 /* @flow */
 
 import type {ArgV} from "./cli";
+import type { Entries } from "./processEntries";
 
 export type QuickPackOptions = {
   projectRoot: string,
@@ -10,6 +11,8 @@ export type QuickPackOptions = {
   output: string,
   hash: boolean,
   target: Target,
+
+  entries: Entries,
 
   production: boolean,
 

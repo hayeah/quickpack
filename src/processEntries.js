@@ -7,7 +7,7 @@ type ParsedEntry = {
   target: string,
 };
 
-type Entries = { [entry: string]: string };
+export type Entries = { [entry: string]: string };
 
 type CompilationTargets = { [target: string]: Entries };
 

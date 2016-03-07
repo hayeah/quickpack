@@ -5,29 +5,31 @@ import path from "path";
 import fs from "fs";
 
 export default function configExternals(config:WebpackConfig,options:QuickPackOptions): void {
-  const {projectRoot,target} = options;
-  let packageJSONPath = path.join(projectRoot,"package.json");
-
-  if(!fs.existsSync(packageJSONPath)) {
+  if(options.target !== "node") {
     return;
   }
-  // $FlowOK
-  let packageJSON = require(packageJSONPath);
 
-  // Treat all peer dependencies as external.
-  var externals = {};
-  Object.assign(externals,packageJSON.peerDependencies);
+  const { projectRoot, entries } = options;
 
-  // If target is node, don't pack node_modules stuff into the bundle.
-  if(target === "node") {
-    Object.assign(externals, packageJSON.dependencies || {});
-    Object.assign(externals, packageJSON.devDependencies || {});
+  config.externals = [suppressGlobalRequire];
+
+
+  function suppressGlobalRequire(context, request, callback) {
+    // console.log("request", context, request);
+    for(let key of Object.keys(entries)) {
+      const entry = entries[key];
+      if(entry === request) {
+        callback();
+        return;
+      }
+    }
+
+    const c1 = request.charAt(0);
+    if(c1 !== "." && request !== "index.ts") {
+      const dep = "commonjs " + request;
+      callback(null, dep);
+    } else {
+      callback();
+    }
   }
-
-  var dependencies = {};
-  Object.keys(externals).forEach(mod => {
-    dependencies[mod] = "commonjs " + mod;
-  });
-
-  config.externals = dependencies;
 }
