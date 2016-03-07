@@ -10,8 +10,9 @@ export default function configProduction(config:WebpackConfig,options:QuickPackO
 
   config.plugins.push(new webpack.optimize.DedupePlugin());
 
-
-  if(options.useUglify) {
+  // uglify does not support ES6
+  // https://github.com/mishoo/UglifyJS2/issues/448
+  if(!options.useES6 && options.useUglify) {
     config.plugins.push(new UglifyJsPlugin());
   }
 }
