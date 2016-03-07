@@ -3,8 +3,8 @@
 import webpack from "webpack";
 
 import type { QuickPackOptions } from "../options";
-import type { ArgV } from "./index";
-import normalizeQuickPackOptions from "../options";
+
+import { makeQuickPackOptions } from "./build/makeQuickPackOptions";
 
 import detectPort from "detect-port";
 
@@ -105,7 +105,7 @@ export function handler(argv: ArgV): void {
 
 
   if(argv.server) {
-    const options = normalizeQuickPackOptions("web", argv);
+    const options = makeQuickPackOptions("web", argv);
     const web = compilations.web;
     if(web !== undefined) {
       delete compilations.web;
@@ -124,9 +124,8 @@ export function handler(argv: ArgV): void {
     }
   }
 
-
   const configs = Object.keys(compilations).map(target => {
-    const options = normalizeQuickPackOptions(target, argv);
+    const options = makeQuickPackOptions(target, argv);
 
     const entries = compilations[target];
     // $FlowOK
