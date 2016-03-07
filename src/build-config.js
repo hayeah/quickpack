@@ -27,7 +27,7 @@ import configPolyfill from "./config/polyfill";
 
 export default buildConfig;
 
-export type Target = "web" | "node" | "library";
+export type Target = "web" | "node";
 
 export function buildConfig(target: Target, entries: Entries, options: QuickPackOptions): WebpackConfig {
   function applyConfigFunctions(...configFunctions) {
@@ -36,14 +36,13 @@ export function buildConfig(target: Target, entries: Entries, options: QuickPack
     });
   }
 
-  let isLibrary = false;
-  if(target === "library") {
-    target = "web";
-    isLibrary = true;
-  }
+  // TODO add an "export" flag. nodejs target should export automatically.
+  let isLibrary = target === "node";
+
   options = Object.assign({},options,{
     target,
     isLibrary,
+    entries,
   });
 
   const {projectRoot, production} = options;
