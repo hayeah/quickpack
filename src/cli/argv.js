@@ -1,3 +1,23 @@
+/* @flow */
+export type Base = {
+  _: Array<string>,
+}
+
+export type Project = {
+  projectRoot: string,
+}
+
+export type Webpack = {
+  es6: boolean,
+
+  sourceMap: boolean,
+  sourceMapCheap: boolean,
+
+  polyfill: boolean,
+
+  target?: string,
+}
+
 export const project = {
   "project-root": {
     alias: "r",

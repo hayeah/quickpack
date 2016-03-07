@@ -1,7 +1,7 @@
 /* @flow */
 
 import type { QuickPackOptions } from "../options";
-import * as options from "./options";
+import * as argv from "./argv";
 
 export type ArgV = {
   watch: boolean,
@@ -54,7 +54,7 @@ export function builder(yargs: any): void {
   return yargs
     .usage('$0 build page1=./entry1 page2=./entry2 ...')
     .options(buildOptions)
-    .options(options.webpack)
+    .options(argv.webpack)
     .example("$0 build entry.js", "Build entry.js")
     .example("$0 build entry1.js entry1.js", "Build multiple entries")
     .example("$0 build page2=./entry1.js page2=./entry2.js ", "Multiple entries with output names")

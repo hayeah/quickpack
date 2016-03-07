@@ -4,13 +4,11 @@ const fs = require("fs");
 const path = require("path");
 const mergedirs = require('merge-dirs').default;
 
-import * as options from "./options";
+import * as argv from "./argv";
 
-type ArgV = {
-  projectRoot: string,
+type ArgV = argv.Base & argv.Project & {
   force: boolean,
-  _: Array<string>,
-}
+};
 
 export function builder(yargs: any): any {
   return yargs
@@ -24,7 +22,7 @@ export function builder(yargs: any): any {
       },
     })
     .require(1)
-    .options(options.project)
+    .options(argv.project)
     .help('h').alias("h","help")
     .wrap(yargs.terminalWidth())
     .example("$0 setup typescript", "Dump TypeScript related config files")
@@ -42,30 +40,29 @@ export function handler(argv: ArgV) {
       console.log("Unsupported tool:",tool);
     }
   });
-
 }
 
 function setupTypeScript(argv: ArgV) {
-  var projectRoot = argv.projectRoot;
+  const { projectRoot, force } = argv;
 
-  var configDir = path.join(__dirname,"..","configFiles","typescript");
+  const configDir = path.join(__dirname, "..", "configFiles", "typescript");
 
   // The ask option is crappy and horrible. Don't use.
-  var conflictResolve = argv.force === true ? "overwrite" : "skip";
+  const conflictResolve = force === true ? "overwrite" : "skip";
   mergedirs(configDir, projectRoot, conflictResolve);
 
   // Configure VSCode
-  var typescriptPath;
+  let typescriptPath;
   // Uses the TypeScript version bundled with quickpack (bad idea?)
   typescriptPath = path.dirname(require.resolve("typescript"));
 
   if(typescriptPath) {
-    var vscodeSettings = {
+    const vscodeSettings = {
       "typescript.tsdk": typescriptPath,
     };
 
-    var w = fs.createWriteStream(path.join(projectRoot,".vscode","settings.json"));
-    w.write(JSON.stringify(vscodeSettings,null,2),function(err) {
+    const w = fs.createWriteStream(path.join(projectRoot,".vscode","settings.json"));
+    w.write(JSON.stringify(vscodeSettings, null, 2), function(err) {
       if(err) {
         console.log(err);
       }
@@ -73,7 +70,7 @@ function setupTypeScript(argv: ArgV) {
   }
 }
 
-var setupMap = {
+const setupMap = {
   "typescript": setupTypeScript,
 }
 
