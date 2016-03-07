@@ -1,13 +1,10 @@
 /* @flow */
 
-// TODO: check that it's a npm project. Or who cares ¯\_(ツ)_/¯
-
-
 import webpack from "webpack";
 
-import type {QuickPackOptions} from "./options";
-import type {ArgV} from "./cli";
-import normalizeQuickPackOptions from "./options";
+import type { QuickPackOptions } from "../options";
+import type { ArgV } from "./index";
+import normalizeQuickPackOptions from "../options";
 
 import detectPort from "detect-port";
 
@@ -26,11 +23,11 @@ function report(err,stats) {
   // console.log(JSON.stringify(json.assets, null, 2));
 }
 
-import type { Target } from "./build-config";
-import {buildConfig} from "./build-config";
-import {extractEntriesFromArguments} from "./processEntries";
+import type { Target } from "../config";
+import {buildConfig} from "../config";
+import {extractEntriesFromArguments} from "../processEntries";
 
-import startDevServer from "./startDevServer";
+import startDevServer from "../startDevServer";
 
 export default function build(argv: ArgV): void {
 

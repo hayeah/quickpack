@@ -3,7 +3,7 @@
 import path from "path";
 import webpack from "webpack";
 
-import type {QuickPackOptions} from "./options";
+import type {QuickPackOptions} from "../options";
 
 export type WebpackConfig = any;
 
@@ -11,19 +11,19 @@ type Entries = {
   [key:string]: string
 };
 
-import configOutput from "./config/output";
-import configCSS from "./config/css";
-import configBabel from "./config/babel";
-import configExternals from "./config/externals";
-import configResolve from "./config/resolve";
-import configProgressReport from "./config/progressReport";
-import configProduction from "./config/production";
-import configTypeScript from "./config/typescript";
-import configHotReload from "./config/hot-reload";
-import configSourceMap from "./config/source-map";
-import configNode from "./config/node";
-import configStaticResources from "./config/static-resources";
-import configPolyfill from "./config/polyfill";
+import configOutput from "./output";
+import configCSS from "./css";
+import configBabel from "./babel";
+import configExternals from "./externals";
+import configResolve from "./resolve";
+import configProgressReport from "./progressReport";
+import configProduction from "./production";
+import configTypeScript from "./typescript";
+import configHotReload from "./hot-reload";
+import configSourceMap from "./source-map";
+import configNode from "./node";
+import configStaticResources from "./static-resources";
+import configPolyfill from "./polyfill";
 
 export default buildConfig;
 
@@ -97,34 +97,3 @@ export function buildConfig(target: Target, entries: Entries, options: QuickPack
 
   return config;
 }
-
-
-
-
-
-
-//   var disableHashing = argv.hash !== true;
-//
-//   var config = {
-
-//
-//     module: {
-//       preLoaders: [{
-//         test: /\.jsx?$/,
-//         exclude: /(node_modules|bower_components)/,
-//         loader: 'import-glob',
-//       }],
-//
-//     },
-
-
-//   }
-//
-//
-//   if(argv.library !== false) {
-//     // module.exports = xxx
-//     config.output.libraryTarget = "commonjs2";
-//   }
-//
-//   return config;
-// }

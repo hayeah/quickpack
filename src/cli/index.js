@@ -24,7 +24,7 @@ var yargs = require('yargs')
   .command('build', 'Builds the project.')
   .command('setup', 'Copy baked configuration files. [experimental]')
   .version(function() {
-    return require('../package').version;
+    return require('../../package').version;
   })
   .alias("v","version")
   .demand(1, 'must provide a valid command'),
@@ -105,8 +105,6 @@ var webpackOptions = {
     },
 };
 
-import build from "./build";
-
 if (command === 'build') {
   argv = yargs.reset()
     .usage('$0 build page1=./entry1 page2=./entry2 ...')
@@ -151,11 +149,11 @@ if (command === 'build') {
     .wrap(yargs.terminalWidth())
     .argv
 
+    // $FlowOK
+    require("./build")(argv);
+
   // console.log(argv);
   // process.exit(1);
-  // const build = require("./build");
-
-  build(argv);
 } else if (command === 'setup') {
   argv = yargs.reset()
     .usage('$0 setup [tool]...')
@@ -175,6 +173,8 @@ if (command === 'build') {
     .argv
 
   // console.log(argv);
+
+  // $FlowOK
   require("./setup")(argv);
   // process.exit(1);
 } else {

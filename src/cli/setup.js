@@ -1,8 +1,11 @@
-var fs = require("fs");
-var path = require("path");
-var mergedirs = require('merge-dirs').default;
+/* @flow */
+const fs = require("fs");
+const path = require("path");
+const mergedirs = require('merge-dirs').default;
 
-function linkConfig(argv) {
+import type { ArgV } from "./index";
+
+export function linkConfig(argv: ArgV) {
 
 
   var tools = argv._.slice(1);
@@ -53,5 +56,3 @@ var setupMap = {
 function copy(src,dst) {
   fs.createReadStream(src).pipe(fs.createWriteStream(dst));
 }
-
-module.exports = linkConfig;
