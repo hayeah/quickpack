@@ -48,6 +48,6 @@
     "url-loader": "^0.5.7",
     "webpack": "^1.12.11",
     "webpack-dev-server": "^1.14.1",
-    "yargs": "^3.32.0"
+    "yargs": "^4.2.0"
   }
 }
