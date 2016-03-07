@@ -36,11 +36,3 @@ jspm_packages
 
 # Optional REPL history
 .node_repl_history
-
-# typescript
-
-tsconfig.json
-jsconfig.json
-global-shim.d.ts
-typings
-.vscode
