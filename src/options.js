@@ -34,7 +34,7 @@ export type QuickPackOptions = {
 };
 
 // Massage the CLI arguments a bit...
-export function normalizeQuickPackOptions(argv: ArgV): QuickPackOptions {
+export function normalizeQuickPackOptions(target: string, argv: ArgV): QuickPackOptions {
   const useProduction = argv.production === true || process.env.NODE_ENV == "production";
 
   if(process.env.NODE_ENV === undefined) {
@@ -45,15 +45,15 @@ export function normalizeQuickPackOptions(argv: ArgV): QuickPackOptions {
     }
   }
 
-  let usePolyfill = argv.polyfill;
-  if(usePolyfill === undefined) {
-    usePolyfill = useProduction;
-  }
-
   let useES6 = argv.es6;
   if(useES6 === undefined) {
-    // default to es6 output for development;
-    useES6 = !usePolyfill && !useProduction;
+    // default to es6 output for NodeJS and developmtn mode;
+    useES6 = target === "node" || !useProduction;
+  }
+
+  let usePolyfill = argv.polyfill;
+  if(usePolyfill === undefined) {
+    usePolyfill = target === "web" && !useES6;
   }
 
 
