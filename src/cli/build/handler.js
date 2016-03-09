@@ -62,7 +62,7 @@ function startCompiler(configs:Array<any>, watch: boolean) {
 
   if(watch) {
     compiler.watch({ // watch options:
-      aggregateTimeout: 300, // wait so long for more changes
+      aggregateTimeout: 0, // wait so long for more changes
       // poll: false // use polling instead of native watchers
       // pass a number to set the polling interval
     }, report);
