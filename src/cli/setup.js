@@ -45,7 +45,7 @@ export function handler(argv: ArgV) {
 function setupTypeScript(argv: ArgV) {
   const { projectRoot, force } = argv;
 
-  const configDir = path.join(__dirname, "..", "configFiles", "typescript");
+  const configDir = path.join(__dirname, "../..", "configFiles", "typescript");
 
   // The ask option is crappy and horrible. Don't use.
   const conflictResolve = force === true ? "overwrite" : "skip";
