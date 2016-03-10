@@ -68,5 +68,7 @@ export function builder(yargs: any): void {
 
 export function handler(argv: ArgV): void {
   // $FlowOK
-  require("./build/handler")(argv);
+  const { handler } = require("./build/handler")
+
+  handler(argv);
 }
