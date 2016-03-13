@@ -11,14 +11,24 @@ import postcssNested from 'postcss-nested'
 export default function configCSS(config: WebpackConfig, options: QuickPackOptions) {
   const {useProduction} = options;
 
-  const cssLoader = ExtractTextPlugin.extract("style-loader", "css-loader?sourceMap!postcss-loader?sourceMap");
-  const scssLoader = ExtractTextPlugin.extract("style-loader", "css-loader?sourceMap!sass-loader?sourceMap");
-  const lessLoader = ExtractTextPlugin.extract("style-loader", "css-loader?sourceMap!less-loader?sourceMap");
+  // See: https://github.com/webpack/loader-utils#interpolatename
+  let localIdentName: string;
+  if(useProduction) {
+    localIdentName = "[md5:hash:base64]";
+  } else {
+    localIdentName = "[path]__[name]_[ext]__[local]___[md5:hash:base64:5]";
+  }
+
+  const cssLoader = `css-loader?sourceMap&importLoaders=1&localIdentName=${localIdentName}`;
+
+  const postcssLoader = ExtractTextPlugin.extract("style-loader", `${cssLoader}!postcss-loader?sourceMap`);
+  const scssLoader = ExtractTextPlugin.extract("style-loader", `${cssLoader}!sass-loader?sourceMap`);
+  const lessLoader = ExtractTextPlugin.extract("style-loader", `${cssLoader}!less-loader?sourceMap`);
 
   let loaders = [
     {
       test: /\.css$/,
-      loader: cssLoader,
+      loader: postcssLoader,
     },
 
     {
