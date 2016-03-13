@@ -37,6 +37,7 @@
     "merge-dirs": "^0.2.1",
     "node-sass": "^3.4.2",
     "postcss-loader": "^0.8.0",
+    "postcss-nested": "^1.0.0",
     "progress": "^1.1.8",
     "quickpack-presets": "0.0.4",
     "react": "^0.14.6",

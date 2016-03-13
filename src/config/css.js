@@ -6,6 +6,7 @@ import ExtractTextPlugin from "extract-text-webpack-plugin";
 import AssetsPlugin from 'assets-webpack-plugin';
 
 import autoprefixer from 'autoprefixer';
+import postcssNested from 'postcss-nested'
 
 export default function configCSS(config: WebpackConfig, options: QuickPackOptions) {
   const {useProduction} = options;
@@ -33,7 +34,10 @@ export default function configCSS(config: WebpackConfig, options: QuickPackOptio
 
   config.module.loaders.push(...loaders);
 
-  config.postcss = [autoprefixer];
+  config.postcss = [
+    autoprefixer,
+    postcssNested({}),
+  ];
 
   // var extractCSS = new ExtractTextPlugin(disableHashing ? "app.css" : "app-[contenthash].css");
   config.plugins.push(new ExtractTextPlugin("[name].css"));
