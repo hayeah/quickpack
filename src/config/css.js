@@ -7,6 +7,8 @@ import AssetsPlugin from 'assets-webpack-plugin';
 
 import autoprefixer from 'autoprefixer';
 import postcssNested from 'postcss-nested'
+import { ExtractPlugin as ExtractJSCSSPlugin } from "jscss-loader";
+
 
 export default function configCSS(config: WebpackConfig, options: QuickPackOptions) {
   const {useProduction} = options;
@@ -40,6 +42,11 @@ export default function configCSS(config: WebpackConfig, options: QuickPackOptio
       test: /\.less$/,
       loader: lessLoader,
     },
+
+    {
+      test: /\.css\.(ts|js)$/,
+      loader: "jscss-loader",
+    },
   ];
 
   config.module.loaders.push(...loaders);
@@ -50,7 +57,9 @@ export default function configCSS(config: WebpackConfig, options: QuickPackOptio
   ];
 
   // var extractCSS = new ExtractTextPlugin(disableHashing ? "app.css" : "app-[contenthash].css");
+  config.plugins.push(new ExtractJSCSSPlugin());
   config.plugins.push(new ExtractTextPlugin("[name].css"));
+
 
     // https://github.com/sporto/assets-webpack-plugin
   // if(!disableHashing) {
