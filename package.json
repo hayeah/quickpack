@@ -46,7 +46,7 @@
     "style-loader": "^0.13.0",
     "supports-color": "^3.1.2",
     "ts-loader": "^0.8.0",
-    "typescript": "^1.8.9",
+    "typescript": "^1.8.10",
     "url-loader": "^0.5.7",
     "webpack": "^1.12.11",
     "webpack-dev-server": "^1.14.1",
