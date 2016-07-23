@@ -20,7 +20,7 @@ export default function configExternals(config:WebpackConfig,options:QuickPackOp
         silent: true,
         compilerOptions: {
           module: "commonjs",
-          jsx: "react",
+          jsx: "preserve",
           target: "es6",
         },
       },
