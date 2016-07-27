@@ -54,7 +54,7 @@ export const webpack = {
     },
 
     "source-map-cheap": {
-      describe: "uses cheap-module-eval-source-map",
+      describe: "faster sourcemap with cheap-module-eval-source-map",
       default: false,
       type: 'boolean'
     },
