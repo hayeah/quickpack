@@ -1,7 +1,7 @@
 /* @flow */
-import path from "path";
+import * as path from "path";
 
-import type {WebpackConfig, QuickPackOptions} from "../options";
+import {WebpackConfig, QuickPackOptions} from "../options";
 
 export default function config(config: WebpackConfig, options: QuickPackOptions): void {
   // Webpack defines these constants as paths relative to context.

@@ -1,6 +1,6 @@
 /* @flow */
 
-import type {WebpackConfig, QuickPackOptions} from "../options";
+import {WebpackConfig, QuickPackOptions} from "../options";
 
 export default function configSourceMap(config:WebpackConfig,options:QuickPackOptions) {
   const {sourceMap, sourceMapType, target, production, sourceMapCheap} = options;

@@ -1,6 +1,6 @@
 /* @flow */
-import type {WebpackConfig, QuickPackOptions} from "../options";
-import webpack from "webpack";
+import {WebpackConfig, QuickPackOptions} from "../options";
+const webpack = require("webpack");
 
 import prependToEntries from "../prependToEntries";
 // disable hot module replacement for now. Too flaky.

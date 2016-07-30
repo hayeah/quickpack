@@ -1,8 +1,8 @@
 /* @flow */
 
-import type {WebpackConfig, QuickPackOptions} from "../options";
-import path from "path";
-import fs from "fs";
+import {WebpackConfig, QuickPackOptions} from "../options";
+import * as path from "path";
+import * as fs from "fs";
 
 export default function configExternals(config:WebpackConfig,options:QuickPackOptions): void {
   if(options.target !== "node") {

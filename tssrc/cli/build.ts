@@ -11,6 +11,7 @@ export type ArgV = {
   production: boolean,
   forward: string,
   es6: boolean,
+  port: number,
 
   sourceMap: boolean,
   sourceMapCheap: boolean,

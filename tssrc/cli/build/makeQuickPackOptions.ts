@@ -1,7 +1,7 @@
 /* @flow */
 
-import type { QuickPackOptions } from "../../options";
-import type { ArgV } from "../build";
+import { QuickPackOptions } from "../../options";
+import { ArgV } from "../build";
 
 // Massage the CLI arguments a bit...
 export function makeQuickPackOptions(target: string, argv: ArgV): QuickPackOptions {

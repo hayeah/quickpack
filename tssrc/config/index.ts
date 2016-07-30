@@ -1,9 +1,9 @@
 /* @flow */
 
-import path from "path";
-import webpack from "webpack";
+import * as path from "path";
+const webpack = require("webpack");
 
-import type {QuickPackOptions} from "../options";
+import {QuickPackOptions} from "../options";
 
 export type WebpackConfig = any;
 
@@ -27,7 +27,8 @@ import configPolyfill from "./polyfill";
 
 export default buildConfig;
 
-export type Target = "web" | "node";
+export type Target = string;
+// "web" | "node";
 
 export function buildConfig(target: Target, entries: Entries, options: QuickPackOptions): WebpackConfig {
   function applyConfigFunctions(...configFunctions) {
@@ -76,7 +77,7 @@ export function buildConfig(target: Target, entries: Entries, options: QuickPack
 
     configStaticResources,
     configExternals,
-    configProgressReport,
+    configProgressReport
   );
 
   if(options.useServer && target === "web") {

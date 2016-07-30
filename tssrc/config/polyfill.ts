@@ -1,7 +1,7 @@
 /* @flow */
 
 import prependToEntries from "../prependToEntries";
-import type {WebpackConfig, QuickPackOptions} from "../options";
+import {WebpackConfig, QuickPackOptions} from "../options";
 
 export default function config(config: WebpackConfig, options: QuickPackOptions): void {
   if(!options.usePolyfill) {

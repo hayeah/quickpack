@@ -1,7 +1,7 @@
 /* @flow */
 
-import webpack from "webpack";
-import detectPort from "detect-port";
+const webpack = require("webpack");
+const detectPort = require("detect-port")
 
 import { makeQuickPackOptions } from "./makeQuickPackOptions";
 
@@ -27,9 +27,9 @@ export function handler(argv: ArgV): void {
 
   if(argv.server) {
     const options = makeQuickPackOptions("web", argv);
-    const web = compilations.web;
+    const web = compilations["web"];
     if(web !== undefined) {
-      delete compilations.web;
+      delete compilations["web"];
       detectPort(options.devServerPort,(err,port) => {
         if(err) {
           console.log(err);

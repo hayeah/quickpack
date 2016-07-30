@@ -1,7 +1,7 @@
 /* @flow */
 
-import type {WebpackConfig, QuickPackOptions} from "../options";
-import path from "path";
+import {WebpackConfig, QuickPackOptions} from "../options";
+import * as path from "path";
 
 export default function configResolve(config:WebpackConfig,options:QuickPackOptions) {
   const {projectRoot} = options;
