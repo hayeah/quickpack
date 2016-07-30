@@ -7,6 +7,12 @@
   "installed": {
     "node/node.d.ts": {
       "commit": "2a24bbb7ca4f13e52c7f6a0ab6144b565bf1ef55"
+    },
+    "q/Q.d.ts": {
+      "commit": "2a24bbb7ca4f13e52c7f6a0ab6144b565bf1ef55"
+    },
+    "q-io/Q-io.d.ts": {
+      "commit": "2a24bbb7ca4f13e52c7f6a0ab6144b565bf1ef55"
     }
   }
 }

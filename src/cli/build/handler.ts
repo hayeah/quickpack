@@ -14,10 +14,17 @@ import { extractEntriesFromArguments } from "../../processEntries";
 
 import startDevServer from "../../startDevServer";
 
+import * as qfs from "q-io/fs";
+import * as path from "path";
+
 export default handler;
 
 export function handler(argv: ArgV): void {
-  const items = argv._.slice(1);
+  let items = argv._.slice(1);
+
+  if (items.length === 0) {
+    items = ["index"];
+  }
 
   const defaultTarget = argv.target || "web";
 
