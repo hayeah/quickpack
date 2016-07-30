@@ -1,23 +1,30 @@
 /* @flow */
 
-import webpack from "webpack";
-import detectPort from "detect-port";
+const webpack = require("webpack");
+const detectPort = require("detect-port")
 
 import { makeQuickPackOptions } from "./makeQuickPackOptions";
 
 import { ArgV } from "../build";
 
-import type { Target } from "../../config";
+import { Target } from "../../config";
 import { buildConfig } from "../../config";
 
 import { extractEntriesFromArguments } from "../../processEntries";
 
 import startDevServer from "../../startDevServer";
 
+import * as qfs from "q-io/fs";
+import * as path from "path";
+
 export default handler;
 
 export function handler(argv: ArgV): void {
-  const items = argv._.slice(1);
+  let items = argv._.slice(1);
+
+  if (items.length === 0) {
+    items = ["index"];
+  }
 
   const defaultTarget = argv.target || "web";
 
@@ -27,9 +34,9 @@ export function handler(argv: ArgV): void {
 
   if(argv.server) {
     const options = makeQuickPackOptions("web", argv);
-    const web = compilations.web;
+    const web = compilations["web"];
     if(web !== undefined) {
-      delete compilations.web;
+      delete compilations["web"];
       detectPort(options.devServerPort,(err,port) => {
         if(err) {
           console.log(err);

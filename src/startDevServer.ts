@@ -1,10 +1,8 @@
-/* @flow */
-
 var webpack = require("webpack");
 var Server = require("webpack-dev-server");
 
-import detectPort from "detect-port";
-import type {QuickPackOptions} from "./options";
+const detectPort = require("detect-port");
+import {QuickPackOptions} from "./options";
 
 export default function startDevServer(config: any, options: QuickPackOptions) {
   const port = options.devServerPort;
@@ -20,22 +18,19 @@ export default function startDevServer(config: any, options: QuickPackOptions) {
   }
 
   const {forwardServer} = options;
-  if(forwardServer !== undefined) {
-    let backendHost;
+  if (forwardServer !== undefined) {
+    let backendHost: string;
 
     // Try parsing as port
     try {
       const port = JSON.parse(forwardServer);
       backendHost = `http://127.0.0.1:${port}`;
-    } catch(err) {
+    } catch (err) {
+      backendHost = forwardServer;
       // console.log(err);
     }
 
-    if(backendHost === undefined) {
-      backendHost = forwardServer;
-    }
-
-    if(!backendHost.match(/^https?:\/\//i)) {
+    if (!backendHost.match(/^https?:\/\//i)) {
       backendHost += "http://"
     }
 
@@ -50,9 +45,9 @@ export default function startDevServer(config: any, options: QuickPackOptions) {
   }
 
   console.log("Server starting on:", port);
-  
-  new Server(compiler,serverOptions).listen(port,function(err) {
-    if(err) {
+
+  new Server(compiler, serverOptions).listen(port, (err: any) => {
+    if (err) {
       console.error(err);
       process.exit(1);
     }

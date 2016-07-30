@@ -1,5 +1,5 @@
 /* @flow */
-import type {WebpackConfig, QuickPackOptions} from "../options";
+import {WebpackConfig, QuickPackOptions} from "../options";
 
 export default function configExternals(config:WebpackConfig,options:QuickPackOptions): void {
   // Chaining loaders

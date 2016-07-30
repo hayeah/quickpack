@@ -1,6 +1,6 @@
 /* @flow */
 
-import type { Entries } from "./processEntries";
+import { Entries } from "./processEntries";
 
 export type QuickPackOptions = {
   projectRoot: string,

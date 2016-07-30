@@ -1,8 +1,9 @@
 /* @flow */
-import type {WebpackConfig, QuickPackOptions} from "../options";
+import {WebpackConfig, QuickPackOptions} from "../options";
 
-import ProgressPlugin from "webpack/lib/ProgressPlugin";
-import ProgressBar from "progress";
+const ProgressPlugin = require("webpack/lib/ProgressPlugin");
+const ProgressBar = require("progress");
+
 
 export default function configProgressReport(config: WebpackConfig): void {
   let progressBar = new ProgressBar("[:msg] :bar",{

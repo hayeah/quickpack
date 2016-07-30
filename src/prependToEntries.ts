@@ -1,5 +1,3 @@
-/* @flow */
-
 type Modules = string | Array<string>;
 
 type Entries = {

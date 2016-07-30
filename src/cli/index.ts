@@ -1,5 +1,3 @@
-/* @flow */
-
 require('yargs')
   .usage('$0 command')
   .command('build', 'Builds the project.', require("./build"))

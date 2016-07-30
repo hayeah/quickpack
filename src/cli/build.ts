@@ -1,6 +1,6 @@
 /* @flow */
 
-import type { QuickPackOptions } from "../options";
+import { QuickPackOptions } from "../options";
 import * as argv from "./argv";
 
 export type ArgV = {
@@ -11,6 +11,7 @@ export type ArgV = {
   production: boolean,
   forward: string,
   es6: boolean,
+  port: number,
 
   sourceMap: boolean,
   sourceMapCheap: boolean,
@@ -39,13 +40,13 @@ const buildOptions = {
   port: {
     describe: "dev-server port",
     type: 'number',
-    default: undefined,
+    default: (undefined as number),
   },
 
   forward: {
     alias: 'f',
     describe: 'forward to backend server',
-    default: undefined,
+    default: (undefined as string),
     type: 'string',
   }
 };

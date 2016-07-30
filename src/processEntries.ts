@@ -1,5 +1,5 @@
-/* @flow */
-import path from "path";
+// import path from "path";
+const path = require("path");
 
 type ParsedEntry = {
   entry: string,
@@ -35,7 +35,7 @@ export function extractEntry(input: string, defaultTarget: string): ParsedEntry 
     entry = path.basename(filename, ext);
   }
 
-  if(filename === "") {
+  if (filename === "") {
     let err = new Error(`filename cannot be empty: ${input}`);
     throw err;
   }
@@ -53,7 +53,7 @@ export function extractEntriesFromArguments(items: Array<string>, defaultTarget:
   items.forEach(arg => {
     const { filename, entry, target } = extractEntry(arg, defaultTarget);
 
-    if(compilations[target] === undefined) {
+    if (compilations[target] === undefined) {
       compilations[target] = {};
     }
 

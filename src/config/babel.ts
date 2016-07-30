@@ -1,6 +1,6 @@
 /* @flow */
 
-import type {WebpackConfig, QuickPackOptions} from "../options";
+import {WebpackConfig, QuickPackOptions} from "../options";
 
 import loadModulesWithProgress from "../loadModulesWithProgress";
 

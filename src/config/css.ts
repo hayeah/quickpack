@@ -1,13 +1,14 @@
 /* @flow */
 
-import type {WebpackConfig, QuickPackOptions} from "../options";
+import {WebpackConfig, QuickPackOptions} from "../options";
 
-import ExtractTextPlugin from "extract-text-webpack-plugin";
-import AssetsPlugin from 'assets-webpack-plugin';
+const ExtractTextPlugin = require("extract-text-webpack-plugin");
+const AssetsPlugin = require('assets-webpack-plugin');
 
-import autoprefixer from 'autoprefixer';
-import postcssNested from 'postcss-nested'
-import { ExtractPlugin as ExtractJSCSSPlugin } from "jscss-loader";
+const autoprefixer = require('autoprefixer');
+const postcssNested = require('postcss-nested');
+
+const ExtractJSCSSPlugin = require("jscss-loader").ExtractPlugin;
 
 
 export default function configCSS(config: WebpackConfig, options: QuickPackOptions) {
