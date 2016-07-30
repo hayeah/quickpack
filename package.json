@@ -51,5 +51,8 @@
     "webpack": "^1.13.1",
     "webpack-dev-server": "^1.14.1",
     "yargs": "^4.2.0"
+  },
+  "devDependencies": {
+    "typescript": "^1.8.10"
   }
 }

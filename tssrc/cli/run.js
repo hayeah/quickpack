@@ -1,3 +1,0 @@
-/* @flow */
-
-// quickpack run [options] entry -- arg1 arg2 ...
