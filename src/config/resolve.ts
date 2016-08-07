@@ -30,7 +30,7 @@ export default function configResolve(config:WebpackConfig,options:QuickPackOpti
 
   const resolveLoader = {
     "modulesDirectories": [
-      // path.join(process.cwd(), 'node_modules'),
+      path.join(process.cwd(), 'node_modules'),
       path.join(__dirname, "..", "..", 'node_modules')
     ],
   };
